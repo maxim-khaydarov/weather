@@ -1,0 +1,35 @@
+<resources>
+
+    <string name="app_name">Weather</string>
+     <string name="light_rain">light rain</string>
+     <string name="moderate_rain">moderate rain</string>
+     <string name="heavy_intensity_rain">heavy intensity rain</string>
+     <string name="clear_sky">Sky is Clear</string>
+     <string name="few_clouds">few clouds</string>
+     <string name="scattered_clouds">scattered clouds</string>
+     <string name="broken_clouds">broken clouds</string>
+     <string name="light_snow">light snow</string>
+     <string name="snow">snow</string>
+     <string name="heavy_snow">heavy snow</string>
+     <string name="thunderstorm">thunderstorm</string>
+     
+     
+     <string name="today">Today</string>
+     <string name="now">Now</string>
+     
+     <string name="humidity">Humidity:</string>
+     <string name="wind">Wind:</string>
+     <string name="pressure">Pressure:</string>
+     <string name="mps">mps</string>
+     
+     <string name="sunrise">Sunrise:</string>
+     <string name="sunset">Sunset:</string>
+	
+     <string name="no_internet">No internet connection</string>
+     <string name="temp_text">Air temperature</string>
+     <string name="max_temp_text">highs in the forecast today</string>
+     <string name="wind_speed_text">Wind speed</string>
+     
+     <string name="top_pref">Enter city, zip code or airport location</string>
+     <string name="save">Save</string>
+</resources>

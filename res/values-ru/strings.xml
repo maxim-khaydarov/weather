@@ -1,0 +1,41 @@
+<resources>
+
+    <string name="app_name">Погода</string>
+     <string name="light_rain">легкий дождь</string>
+     <string name="moderate_rain">дождь</string>
+     <string name="heavy_intensity_rain">сильный дождь</string>
+     <string name="clear_sky">ясно</string>
+     <string name="few_clouds">переменная облачность</string>
+     <string name="scattered_clouds">облачно</string>
+     <string name="broken_clouds">пасмурно</string>
+     <string name="light_snow">легкий снег</string>
+     <string name="snow">снег</string>
+     <string name="heavy_snow">снегопад</string>
+     <string name="thunderstorm">шторм</string>
+     <string name="light_intensity_shower_rain">гроза с ливнем</string>
+     <string name="drizzle">морось</string>
+     <string name="mist">туман</string>
+    
+     
+     <string name="today">Сегодня</string>
+     <string name="now">Сейчас</string>
+     
+     <string name="humidity">Влажность:</string>
+     <string name="wind">Ветер:</string>
+     <string name="pressure">Давление:</string>
+     <string name="mps">м/с</string>
+     
+     <string name="sunrise">Восход:</string>
+     <string name="sunset">Закат:</string>
+     
+     <string name="no_internet">Нет интернет соединения</string>
+     <string name="temp_text">Температура воздуха </string>
+     <string name="max_temp_text">максимальная температура воздуха в прогнозе на сегодня составила</string>
+     <string name="wind_speed_text">Скорость ветра</string>
+     
+     <string name="top_pref">Введите город, индекс или ближайший аэропорт</string>
+     <string name="save">Сохранить</string>
+     
+     <string name="podskazka">Подсказка: для поиска, вводите город на транслите.\nТак же доступна функция ввода города на кирилице, но без поиска.</string>
+
+</resources>

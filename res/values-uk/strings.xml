@@ -1,0 +1,41 @@
+<resources>
+
+    <string name="app_name">Погода</string>
+     <string name="light_rain">легкий дощ</string>
+     <string name="moderate_rain">дощ</string>
+     <string name="heavy_intensity_rain">сильний дощ</string>
+     <string name="clear_sky">ясно</string>
+     <string name="few_clouds">мінлива хмарність</string>
+     <string name="scattered_clouds">хмарно</string>
+     <string name="broken_clouds">похмуро</string>
+     <string name="light_snow">легкий сніг</string>
+     <string name="snow">сніг</string>
+     <string name="heavy_snow">снігопад</string>
+     <string name="thunderstorm">шторм</string>
+     <string name="light_intensity_shower_rain">гроза зі зливою</string>
+     <string name="drizzle">мряка</string>
+     <string name="mist">туман</string>
+    
+     
+     <string name="today">Сьогодні</string>
+     <string name="now">Зараз</string>
+     
+     <string name="humidity">Вологість:</string>
+     <string name="wind">Вітер:</string>
+     <string name="pressure">Тиск:</string>
+     <string name="mps">м/с</string>
+     
+     <string name="sunrise">Схід:</string>
+     <string name="sunset">Захід:</string>
+     
+     <string name="no_internet">Немає інтернет зв\'язку</string>
+     <string name="temp_text">Температура повітря </string>
+     <string name="max_temp_text">максимальна температура повітря в прогнозі на сьогодні</string>
+     <string name="wind_speed_text">Швидкість вітру</string>
+     
+     <string name="top_pref">Введіть місто, індекс або найближчий аеропорт</string>
+	 <string name="save">Зберегти</string>
+	 
+	 <string name="podskazka">Підказка: для пошуку, введіть місто на трансліті.\nТакож доступна функція введення міста на кирилиці, але без пошуку.</string>
+	 
+</resources>
