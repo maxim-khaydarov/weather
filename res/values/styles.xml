@@ -49,6 +49,7 @@
 </style>
 
 	
+	<color name="default_edgeeffect_color">@android:color/transparent</color>
 	
 	<style name="ShadowText">
     <item name="android:textColor">@color/white</item>

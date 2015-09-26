@@ -68,6 +68,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.app.TaskStackBuilder;
+
 /*
  * Copyright (C) 2013 Surviving with Android (http://www.survivingwithandroid.com)
  *
@@ -195,7 +197,7 @@ public class MainActivity extends Activity  implements OnClickListener {
 			
 			
 			
-			
+		    
 			
 			
 		listView1 = (ListView) findViewById(R.id.listView1);
@@ -243,7 +245,8 @@ public class MainActivity extends Activity  implements OnClickListener {
 		main.setVisibility(View.GONE);
 		
 		
-
+		//Intent intent = new Intent(this, AllCityActivity.class);
+    	//startActivity(intent);
 		
 		//JSONWeatherTask task = new JSONWeatherTask();
 		//task.execute(new String[]{city,lang});
@@ -300,7 +303,9 @@ public class MainActivity extends Activity  implements OnClickListener {
 		switch(v.getId())  { 
 	     	
 	    case R.id.button1:
-	    	check_int();
+	    	//check_int();
+	    	Intent intenwt = new Intent(this, AllCityActivity.class);
+	    	startActivity(intenwt);
 			break;
 	    case R.id.button2:
 	    	Intent intent = new Intent(this, PreferenceActivity.class);
@@ -857,7 +862,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		textView9.setText(arraylist_base .get(10));
 		textView11.setText(arraylist_base .get(11));
 		
-		create_notif();
+		//create_notif();
 		
 ///////FORECAST WEATHER		
 			

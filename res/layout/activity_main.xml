@@ -7,82 +7,16 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/top_bar" />
+
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scaleType="centerCrop" />
-
-    <RelativeLayout
-        android:id="@+id/RelativeLayout1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" >
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="44dp"
-            android:layout_height="19dp"
-            android:layout_centerVertical="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/s5" />
-
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="5dp"
-            android:layout_toRightOf="@+id/imageView3"
-            android:text="Сеть"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="Время"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/imageView4"
-            android:text="80 %"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="24dp"
-            android:layout_height="14dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="3dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/b_ch" />
-
-        <ProgressBar
-            android:id="@+id/progressBar1"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="2dp"
-            android:layout_toRightOf="@+id/textView7"
-            android:indeterminateDrawable="@drawable/progress_well" />
-
-    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/mainLayout"
