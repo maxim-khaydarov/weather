@@ -10,8 +10,10 @@ import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +35,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager.LayoutParams;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -41,6 +44,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
@@ -49,6 +53,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
@@ -69,7 +74,8 @@ public class PreferenceActivity extends Activity  implements OnClickListener{
 	public static final String APP_PREFERENCES_VISITED = "visited"; 
 	public static final String APP_PREFERENCES_ADRESS = "adress";
 
-	private ArrayList<String> arraylist=new ArrayList<String>();
+	private ArrayList<HashMap<String, String>> arraylist=new ArrayList<HashMap<String, String>>();
+	
 	
 	ListView listview;
 	
@@ -83,11 +89,14 @@ public class PreferenceActivity extends Activity  implements OnClickListener{
 	   private DatabaseHelper mDatabaseHelper;
 	   private SQLiteDatabase mSqLiteDatabase;
 	   
+	   private DatabaseHelperCityMain mDatabaseHelperCity;
 	   
+	   //List<String[]> scoreList ;
 	   
-	   List<String[]> scoreList ;
-	   
-	   ArrayAdapter<String> adapter;
+	   ArrayAdapter<HashMap<String, String>> adapter;
+	  // ArrayList <String> NewsArrayList;
+	   HashMap<String, String> map1;
+	   SimpleAdapter adapters;
 	   
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +104,7 @@ public class PreferenceActivity extends Activity  implements OnClickListener{
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_pref);
-		
+		/*
 		String roman = "fonts/Regular.otf";
 		String medium = "fonts/Medium.otf";
 		String bold =  "fonts/Bold.otf";
@@ -106,12 +115,19 @@ public class PreferenceActivity extends Activity  implements OnClickListener{
 		typefaceBold = Typeface.createFromAsset(getAssets(), bold);
 		typefaceThin = Typeface.createFromAsset(getAssets(), thin);
 		typefaceUltra = Typeface.createFromAsset(getAssets(), ultra);
-		
+		*/
 		edt = (EditText) findViewById(R.id.cityEdtText);
 		
-		adapter = new ArrayAdapter<String>(this, R.layout.list_country, arraylist)
+		adapter = new ArrayAdapter<HashMap<String, String>>(this, R.layout.list_country, arraylist)
 	    		;
+		
+		adapters = new SimpleAdapter(this, arraylist,
+	            R.layout.row, new String[] { "name", "country",
+	                    "id" }, new int[] { R.id.city, R.id.country,
+	                    R.id.id });
 		 
+		mDatabaseHelperCity = new DatabaseHelperCityMain(this);
+		
 		mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 		
 		textView1 = (TextView) findViewById(R.id.textView1);
@@ -131,6 +147,10 @@ public class PreferenceActivity extends Activity  implements OnClickListener{
 
 		   mSqLiteDatabase = mDatabaseHelper.getWritableDatabase();
 		
+		   //NewsArrayList = new ArrayList<String>();
+
+		      
+		   
 		   
 		   listview.setOnItemClickListener(new OnItemClickListener()
            {
@@ -138,7 +158,7 @@ public class PreferenceActivity extends Activity  implements OnClickListener{
                    public void onItemClick(AdapterView<?> arg0, View v,int position, long arg3)
                    {
                        
-                           String selectedAnimal=arraylist.get(position);
+                           /*String selectedAnimal=arraylist.get(position);
                            
                            int endIndex = selectedAnimal.lastIndexOf(",");
                            if (endIndex != -1)  
@@ -146,14 +166,21 @@ public class PreferenceActivity extends Activity  implements OnClickListener{
                         	   String result = selectedAnimal.split(",")[0];
                                //String newstr = selectedAnimal.substring(0, endIndex); // not forgot to put check if(endIndex != -1)
                                
+                        	   mDatabaseHelperCity.addBook(new City("Kremenchug", result)); 
+                        	   
                                Editor editor = mSettings.edit();
                       		   	editor.putString(APP_PREFERENCES_CITY, result).commit();
                       		   	editor.putString(APP_PREFERENCES_ADRESS, "id").commit();
                       		   	Log.d("",result );
                            }
                            
-                           
+                           */
+                	   HashMap<String, String> h = arraylist.get(position);
+                	   String i = h.get("id");
                		   	
+                	   //Log.d("!!", i);
+                	   mDatabaseHelperCity.addBook(new City(i)); 
+                	   
                		   	Intent intent = new Intent(PreferenceActivity.this, MainActivity.class);
                	    	startActivity(intent);
                            //Toast.makeText(getApplicationContext(), "Animal Selected : "+selectedAnimal,   Toast.LENGTH_LONG).show();
@@ -299,7 +326,18 @@ public class PreferenceActivity extends Activity  implements OnClickListener{
 	    	            	String name=cmelayu.getString(cmelayu.getColumnIndex("name"));
 	    	                String country=cmelayu.getString(cmelayu.getColumnIndex("countryCode"));
 	    	                String id=cmelayu.getString(cmelayu.getColumnIndex("id_c"));
-	    	             arraylist.add(id + ", " + name + ", " + country);
+	    	                
+	    	               map1 = new HashMap<String, String>();
+	    	     		   map1 .put("id", id);
+	    	     		   map1 .put("name", name+", ");
+	    	     		   map1.put("country", country);
+	    	     		  arraylist.add(map1);
+	    	     		  
+	    	     		 
+	    	     		  //NewsArrayList.add(name + ", " + country);
+	    	     		   
+	    	     		  Log.d("!!", map1.toString());
+	    	             
 
 	    	            } while (cmelayu.moveToNext());
 	    	        }
@@ -342,13 +380,17 @@ public class PreferenceActivity extends Activity  implements OnClickListener{
 	        }
 	    }
 */
-	    listview.setAdapter(adapter);
+	    listview.setAdapter(adapters);
+	    
 	}
 	    catch(Exception e){
 	    	Log.d("ERORR", " ");
 	    }
 	          }
 
+	   
+
+	    
 }
 
 

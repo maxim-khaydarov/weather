@@ -20,14 +20,13 @@ public class DatabaseHelperCityMain extends SQLiteOpenHelper {
 	public static final String DATABASE_TABLE = "city";
 	private static final int DATABASE_VERSION = 1;
 	
-	public static final String NAME_CITY = "name_city";
+	//public static final String NAME_CITY = "name_city";
 	public static final String ID_CITY = "id_city";
 	public static final String KEY_ID = "id";
 	
 	private static final String DATABASE_CREATE_SCRIPT = "create table "
 			+ DATABASE_TABLE + " (" + KEY_ID
-			+ " integer primary key autoincrement, " + NAME_CITY
-			+ " text not null, " + ID_CITY 	+ " integer);";
+			+ " integer primary key autoincrement, " +  ID_CITY + " text NOT NULL);";
 	
     public DatabaseHelperCityMain(Context context, String name, SQLiteDatabase.CursorFactory factory,
             int version) {
@@ -56,8 +55,7 @@ public void addBook(City city){
 	SQLiteDatabase db = this.getWritableDatabase();
 	// 2. create ContentValues to add key "column"/value
 	ContentValues values = new ContentValues();
-	values.put(NAME_CITY, city.getTitle()); // get title 
-	values.put(ID_CITY, city.getId()); // get author
+	values.put(ID_CITY, city.getAuthor()); // get author
 	// 3. insert
 	db.insert(DATABASE_TABLE, // table
 			null, //nullColumnHack
@@ -98,8 +96,7 @@ public List<City> getAllBooks() {
         do {
             book = new City();
             book.setId(Integer.parseInt(cursor.getString(0)));
-            book.setTitle(cursor.getString(1));
-            book.setAuthor(cursor.getString(2));
+            book.setAuthor(cursor.getString(1));
 
             // Add book to books
             city.add(book);

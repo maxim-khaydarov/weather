@@ -207,7 +207,6 @@ public class MainActivity extends Activity  implements OnClickListener {
 		button2.setOnClickListener(this);
 		
 		prog1 = (ProgressBar) findViewById(R.id.progressBar1);
-		prog1.setVisibility(View.GONE);
 		button1 = (Button) findViewById(R.id.button1);
 		button1.setOnClickListener(this);
 
@@ -303,13 +302,13 @@ public class MainActivity extends Activity  implements OnClickListener {
 		switch(v.getId())  { 
 	     	
 	    case R.id.button1:
-	    	//check_int();
-	    	Intent intenwt = new Intent(this, AllCityActivity.class);
-	    	startActivity(intenwt);
+	    	check_int();
+	    	
 			break;
 	    case R.id.button2:
-	    	Intent intent = new Intent(this, PreferenceActivity.class);
-	    	startActivity(intent);
+	    	Intent intenwt = new Intent(this, AllCityActivity.class);
+	    	startActivity(intenwt);
+	    	
 	}
 	}
 	
