@@ -5,6 +5,13 @@
     android:layout_height="50dp"
     android:orientation="vertical" >
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/cloudy_day_cloud" />
+
     <TextView
         android:id="@+id/temp"
         android:layout_width="wrap_content"
@@ -13,6 +20,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="15dp"
         android:text="25"
+        android:textColor="@color/white"
         android:textSize="45sp" />
 
     <TextView
@@ -24,7 +32,7 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="10dp"
         android:text="12:25"
-        android:textColor="@color/black" />
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/city"
@@ -32,7 +40,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/time"
         android:layout_alignParentBottom="true"
-        android:text="Kiev" />
+        android:text="Kiev"
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/country"
@@ -41,6 +50,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/city"
-        android:text="UA" />
+        android:text="UA"
+        android:textColor="@color/white" />
 
 </RelativeLayout>

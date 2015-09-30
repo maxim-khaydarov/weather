@@ -26,12 +26,15 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager.LayoutParams;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -63,6 +66,8 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	JSONObject jsonobject;
 	ArrayList <HashMap<String, String>> arraylist;
 	ProgressBar prog1;
+	
+	ArrayList<ItemDetails> results;
 	
 	ArrayAdapter<HashMap<String, String>> array_adapter;
 	  // ArrayList <String> NewsArrayList;
@@ -265,10 +270,14 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    		 
    		 JSONArray  list = jsonObj.getJSONArray("list");
    		 
-		 
+   		results = new ArrayList<ItemDetails>();
+
+   		
+
    		 //Loop the Array
    		for (int i = 0; i < list.length(); i++) {
    			JSONObject JSONWeather = list.getJSONObject(i);
+   			ItemDetails item_details = new ItemDetails();
    			map = new HashMap<String, String>();
    			JSONObject sysObj = JSONWeather.getJSONObject("sys");
    			String country = sysObj.getString("country");
@@ -283,7 +292,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    			String description = JSONWeather2.getString("description");
    			String main = JSONWeather2.getString("main");
    			map.put("description", description);
-   			Log.e("description", description);
+   			item_details.setWeather(description);
    			map.put("main", main);
    			Log.e("main", main);
    			}
@@ -310,6 +319,12 @@ public class AllCityActivity extends Activity  implements OnClickListener{
       		map.put("date", formattedDate);
    			map.put("country", country);
    			map.put("temp", temp);
+   			item_details.setCity(city_b);
+   			item_details.setTime(formattedDate);
+   			item_details.setCountry(country);
+   			item_details.setTemp(temp);
+   			results.add(item_details);
+
    			
    			arraylist.add(map);
    		}
@@ -337,7 +352,8 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	                    "name", "country" }, new int[] { R.id.temp, R.id.time,
 	                    R.id.city, R.id.country });
 		
-		lvMain.setAdapter(adapters);
+		lvMain.setAdapter(new ItemListBaseAdapter(AllCityActivity.this, results));
+		//lvMain.setAdapter(adapters);
 		setListViewHeightBasedOnChildren(lvMain);
 		
 		prog1.setVisibility(View.GONE);
