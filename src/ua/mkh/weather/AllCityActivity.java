@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -133,7 +134,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 			// get all books
 			//mDatabaseHelper.getAllBooks();
 			
-			
+			/*
 			lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
@@ -147,6 +148,20 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 					load_base();
 				}
 			});
+			*/
+			lvMain.setOnItemClickListener(new OnItemClickListener() {
+				
+				@Override
+				public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+				Object o = lvMain.getItemAtPosition(position);
+				
+				ItemDetails obj_itemDetails = (ItemDetails)o;
+				Toast.makeText(AllCityActivity.this, "You have chosen : " + " " + obj_itemDetails.getCity(), Toast.LENGTH_LONG).show();
+				
+				}
+				
+				});
+
 
 		 //load_base();
 	}
