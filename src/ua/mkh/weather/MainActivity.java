@@ -191,7 +191,7 @@ public class MainActivity extends Activity  implements OnClickListener {
 		 telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		 telephonyManager.listen(psListener,PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 		 
-		   // check_int();
+		    //check_int();
 		
 		    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudy_cloud);
 			
@@ -545,7 +545,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         		 
         	 }
         	 catch (NullPointerException w){
-        		 
+        		 Log.d("NULL", "NULL");
         	 }
          
 		return null;
@@ -891,10 +891,10 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		
 		}
 		catch (IndexOutOfBoundsException e){
-			//Toast.makeText(getApplicationContext(), "Ошибка получения данных!",
-			//		   Toast.LENGTH_LONG).show();
-			//prog1.setVisibility(View.GONE);
-			check_int();
+			Toast.makeText(getApplicationContext(), "Ошибка получения данных!",
+					   Toast.LENGTH_LONG).show();
+			prog1.setVisibility(View.GONE);
+			//check_int();
 		}
 		catch(NullPointerException w){
 			Toast.makeText(getApplicationContext(), "Ошибка!",
@@ -1061,22 +1061,17 @@ protected void onResume() {
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.clear_sky_d));
     	 	}
     	 	
-    	 	String city = mSettings.getString(APP_PREFERENCES_CITY, "Kyiv");
-			city = city.replace(" ","_");
-			Log.i("", city);
+    	 	//String city = mSettings.getString(APP_PREFERENCES_CITY, "2172797");
+			//city = city.replace(" ","_");
+			//Log.i("", city);
 			
-			String adress = mSettings.getString(APP_PREFERENCES_ADRESS, "q");
-			Log.d("", adress);
-			if(adress.contains("id")){
-			url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + city + "&units=metric";
-			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + city + "&units=metric";
-			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + city + "&units=metric";
-			}
-			else {
-				url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&q=" + city + "&units=metric";
-				url_base = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric";
-				url_daily = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=metric";
-			}
+			//String adress = mSettings.getString(APP_PREFERENCES_ADRESS, "q");
+			//Log.d("", adress);
+			
+			url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + "2172797" + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
+			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + "2172797" + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
+			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + "2172797" + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
+			
     	 	check_int();
     	 	
     	 	top_bar();

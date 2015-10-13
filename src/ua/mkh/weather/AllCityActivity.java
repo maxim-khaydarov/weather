@@ -246,7 +246,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		//DAILY WEATHER
 		
 		Log.e("START", "!!!!!!!!!!");
-		
+		try{
 		list = mDatabaseHelper.getAllBooks();
 		
 		String[] stringArray = new String[list.size()];
@@ -259,6 +259,11 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		   u = u + "," + list.get(i).toString();
 		   }
 		   Log.d("LOAD", u);
+		}
+		
+		}
+		catch (NullPointerException e){
+			
 		}
 		
 		String url = "http://api.openweathermap.org/data/2.5/group?id=" + u + "&units=metric";
@@ -362,6 +367,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	@Override
 	protected void onPostExecute(Void result) {		
 ////WEATHER BASE	
+		try{
 		adapters = new SimpleAdapter(AllCityActivity.this, arraylist,
 	            R.layout.row_all_city, new String[] { "temp", "date",
 	                    "name", "country" }, new int[] { R.id.temp, R.id.time,
@@ -370,7 +376,10 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		lvMain.setAdapter(new ItemListBaseAdapter(AllCityActivity.this, results));
 		//lvMain.setAdapter(adapters);
 		setListViewHeightBasedOnChildren(lvMain);
-		
+		}
+		catch (NullPointerException r){
+			
+		}
 		prog1.setVisibility(View.GONE);
 	
 	}
