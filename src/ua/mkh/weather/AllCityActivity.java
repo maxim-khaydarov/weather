@@ -266,7 +266,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 			
 		}
 		
-		String url = "http://api.openweathermap.org/data/2.5/group?id=" + u + "&units=metric";
+		String url = "http://api.openweathermap.org/data/2.5/group?id=" + u + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
 
 		Log.e("START", url);
 	//BASE WEATHER
@@ -299,6 +299,11 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    			JSONObject JSONWeather = list.getJSONObject(i);
    			ItemDetails item_details = new ItemDetails();
    			map = new HashMap<String, String>();
+   			
+   			JSONObject cordObj = JSONWeather.getJSONObject("coord");
+   			int lon = cordObj.getInt("lon");
+   			
+   			
    			JSONObject sysObj = JSONWeather.getJSONObject("sys");
    			String country = sysObj.getString("country");
    			
@@ -321,26 +326,91 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    			
    			
    			JSONObject sysObjMain = JSONWeather.getJSONObject("main");
-   			String temp = sysObjMain.getString("temp");
-   			Log.e("temp", temp);
+   			String temp = Integer.toString(Math.round(sysObjMain.getInt("temp")));
+   			
+			 Log.d("temp", temp);
    			
    			
    			String city_b = JSONWeather.getString("name");
    			Log.e("name", city_b);
       		 long dt = JSONWeather.getLong("dt");
+      		 
    	 
-   	 
-      		 Date date = new Date(dt*1000L);
-      		 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm"); // the format of your date
-   		 String formattedDate = sdf.format(date);
+      		 
+      		 
+      		 boolean mine = false;
+      		 int dodatkovo = 0;
+      		 if (lon < 0){
+      			mine = true;
+      			lon = lon * -1;
+      		 }
+      		 
+      		 if(lon < 7.5 ){
+      			 dodatkovo = 0;
+      		 }
+      		 else if (lon > 7.5 && lon < 22.5){
+      			 dodatkovo = 1;
+      		 }
+      		 else if (lon > 22.5 && lon < 37.5){
+      			 dodatkovo = 2;
+      		 }
+      		 else if (lon > 37.5 && lon < 52.5){
+      			 dodatkovo = 3;
+      		 }
+      		 else if(lon > 52.5 && lon < 67.5){
+      			 dodatkovo = 4;
+      		 }
+      		 else if(lon > 67.5 && lon < 82.5){
+      			 dodatkovo = 5;
+      		 }
+      		 else if (lon > 82.5 && lon < 97.5){
+      			 dodatkovo = 6;
+      		 }
+      		 else if (lon >97.5 && lon < 105){
+      			 dodatkovo = 7;
+      		 }
+      		 else if(lon > 105 && lon < 127.5){
+      			 dodatkovo = 8;
+      		 }
+      		 else if (lon > 127.5 && lon < 142.5){
+      			 dodatkovo = 9;
+      		 }
+      		 else if (lon > 142.5 && lon < 157.5){
+      			 dodatkovo = 10;
+      		 }
+      		 else if(lon > 157.5 && lon < 172.5){
+      			 dodatkovo = 11;
+      		 }
+      		 else if (lon > 172.5 && lon < 180){
+      			 dodatkovo = 12;
+      		 }
+      			 
+      			 
+      		Date date = new Date(dt*1000L);
+      		
+      		
+      		 SimpleDateFormat hourformat = new SimpleDateFormat("HH"); // the format of your date
+      		 SimpleDateFormat minformat = new SimpleDateFormat("mm");
+      		String hour;
+      		 if (mine == true){
+      		 hour = String.valueOf(Integer.parseInt(hourformat.format(date)) - dodatkovo);
+      		 }
+      		 else{
+      			 hour = String.valueOf(Integer.parseInt(hourformat.format(date)) + dodatkovo);
+      		 }
+      		String minute = minformat.format(date);
    		 
+      		int time = Integer.parseInt(hour + minute);
+      		if (time > 2359){
+      			time = time - 24;
+      		}
       		
       		map.put("name", city_b);
-      		map.put("date", formattedDate);
+      		map.put("date", String.valueOf(time));
    			map.put("country", country);
    			map.put("temp", temp);
    			item_details.setCity(city_b);
-   			item_details.setTime(formattedDate);
+   			item_details.setTime(String.valueOf(time));
    			item_details.setCountry(country);
    			item_details.setTemp(temp);
    			results.add(item_details);
@@ -364,6 +434,10 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	
 	
 	
+	private String ValueOf(int round) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	@Override
 	protected void onPostExecute(Void result) {		
 ////WEATHER BASE	
