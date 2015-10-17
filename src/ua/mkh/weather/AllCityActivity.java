@@ -2,9 +2,11 @@ package ua.mkh.weather;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -333,10 +335,13 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    			
    			String city_b = JSONWeather.getString("name");
    			Log.e("name", city_b);
-      		 long dt = JSONWeather.getLong("dt");
+      		// long dt = JSONWeather.getLong("dt");
       		 
    	 
-      		 
+   			Calendar cal = Calendar.getInstance();
+   			
+   			
+   			
       		 
       		 boolean mine = false;
       		 int dodatkovo = 0;
@@ -346,71 +351,107 @@ public class AllCityActivity extends Activity  implements OnClickListener{
       		 }
       		 
       		 if(lon < 7.5 ){
-      			 dodatkovo = 0;
+      			//cal.add(Calendar.HOUR, 0);
+      			cal.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
       		 }
       		 else if (lon > 7.5 && lon < 22.5){
-      			 dodatkovo = 1;
+      			if (mine == true){
+      				TimeZone.getTimeZone("GMT-01:00");
+         		 }
+      			else
+      				TimeZone.getTimeZone("GMT+01:00");
       		 }
-      		 else if (lon > 22.5 && lon < 37.5){
-      			 dodatkovo = 2;
+      		 else if (lon > 22.6 && lon < 37.5){
+      			if (mine == true){
+      				TimeZone.getTimeZone("GMT-02:00");
+         		 }
+      			else
+      			TimeZone.getTimeZone("GMT+02:00");
       		 }
-      		 else if (lon > 37.5 && lon < 52.5){
-      			 dodatkovo = 3;
+      		 else if (lon > 37.6 && lon < 52.5){
+      			if (mine == true){
+      				TimeZone.getTimeZone("GMT-03:00");
+         		 }
+      			else
+      				TimeZone.getTimeZone("GMT+03:00");
       		 }
-      		 else if(lon > 52.5 && lon < 67.5){
-      			 dodatkovo = 4;
+      		 else if(lon > 52.6 && lon < 67.5){
+      			if (mine == true){
+      				TimeZone.getTimeZone("GMT-04:00");
+         		 }
+      			else
+      				TimeZone.getTimeZone("GMT+04:00");
       		 }
-      		 else if(lon > 67.5 && lon < 82.5){
-      			 dodatkovo = 5;
+      		 else if(lon > 67.6 && lon < 82.5){
+      			if (mine == true){
+      				TimeZone.getTimeZone("GMT-05:00");
+         		 }
+      			else
+      				TimeZone.getTimeZone("GMT+05:00");
       		 }
-      		 else if (lon > 82.5 && lon < 97.5){
-      			 dodatkovo = 6;
+      		 else if (lon > 82.6 && lon < 97.5){
+      			if (mine == true){
+      				TimeZone.getTimeZone("GMT-06:00");
+         		 }
+      			else
+      				TimeZone.getTimeZone("GMT+06:00");
       		 }
-      		 else if (lon >97.5 && lon < 105){
-      			 dodatkovo = 7;
+      		 else if (lon >97.6 && lon < 105){
+      			if (mine == true){
+      				TimeZone.getTimeZone("GMT-07:00");
+         		 }
+      			else
+      				TimeZone.getTimeZone("GMT+07:00");
       		 }
-      		 else if(lon > 105 && lon < 127.5){
-      			 dodatkovo = 8;
+      		 else if(lon > 105.1 && lon < 127.5){
+      			if (mine == true){
+      				TimeZone.getTimeZone("GMT-08:00");
+         		 }
+      			else
+      				TimeZone.getTimeZone("GMT+08:00");
       		 }
-      		 else if (lon > 127.5 && lon < 142.5){
-      			 dodatkovo = 9;
+      		 else if (lon > 127.6 && lon < 142.5){
+      			if (mine == true){
+      				TimeZone.getTimeZone("GMT-09:00");
+         		 }
+      			else
+      				TimeZone.getTimeZone("GMT+09:00");
       		 }
-      		 else if (lon > 142.5 && lon < 157.5){
-      			 dodatkovo = 10;
+      		 else if (lon > 142.6 && lon < 157.5){
+      			if (mine == true){
+      				TimeZone.getTimeZone("GMT-10:00");
+         		 }
+      			else
+      				TimeZone.getTimeZone("GMT+10:00");
       		 }
-      		 else if(lon > 157.5 && lon < 172.5){
-      			 dodatkovo = 11;
+      		 else if(lon > 157.6 && lon < 172.5){
+      			if (mine == true){
+      				TimeZone.getTimeZone("GMT-11:00");
+         		 }
+      			else
+      				TimeZone.getTimeZone("GMT+11:00");
       		 }
-      		 else if (lon > 172.5 && lon < 180){
-      			 dodatkovo = 12;
+      		 else if (lon > 172.6 && lon < 180){
+      			if (mine == true){
+      				TimeZone.getTimeZone("GMT-12:00");
+         		 }
+      			else
+      				TimeZone.getTimeZone("GMT+12:00");
       		 }
       			 
-      			 
-      		Date date = new Date(dt*1000L);
+      		Date date = cal.getTime();
+   			String date1 = (new SimpleDateFormat("HH:mm")).format(date);
       		
       		
-      		 SimpleDateFormat hourformat = new SimpleDateFormat("HH"); // the format of your date
-      		 SimpleDateFormat minformat = new SimpleDateFormat("mm");
-      		String hour;
-      		 if (mine == true){
-      		 hour = String.valueOf(Integer.parseInt(hourformat.format(date)) - dodatkovo);
-      		 }
-      		 else{
-      			 hour = String.valueOf(Integer.parseInt(hourformat.format(date)) + dodatkovo);
-      		 }
-      		String minute = minformat.format(date);
    		 
-      		int time = Integer.parseInt(hour + minute);
-      		if (time > 2359){
-      			time = time - 24;
-      		}
+      		
       		
       		map.put("name", city_b);
-      		map.put("date", String.valueOf(time));
+      		map.put("date", date1);
    			map.put("country", country);
    			map.put("temp", temp);
    			item_details.setCity(city_b);
-   			item_details.setTime(String.valueOf(time));
+   			item_details.setTime(date1);
    			item_details.setCountry(country);
    			item_details.setTemp(temp);
    			results.add(item_details);
