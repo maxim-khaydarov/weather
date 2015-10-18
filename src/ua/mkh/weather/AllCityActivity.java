@@ -1,5 +1,6 @@
 package ua.mkh.weather;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -337,14 +338,28 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    			Log.e("name", city_b);
       		// long dt = JSONWeather.getLong("dt");
       		 
-   	 
-   			Calendar cal = Calendar.getInstance();
+   			//boolean y = TimeZone.getDefault().inDaylightTime( new Date() );
+   			
+   			
+   			
+   			
+   			
+   			
+   			
+   			final Date gmt = new Timestamp(System.currentTimeMillis()
+   		            - Calendar.getInstance().getTimeZone()
+   		                    .getOffset(System.currentTimeMillis()));
+   			
+   			Calendar calendar = Calendar.getInstance();
+   			calendar.setTime(gmt);
+   			
+   			
    			
    			
    			
       		 
       		 boolean mine = false;
-      		 int dodatkovo = 0;
+      		
       		 if (lon < 0){
       			mine = true;
       			lon = lon * -1;
@@ -352,108 +367,112 @@ public class AllCityActivity extends Activity  implements OnClickListener{
       		 
       		 if(lon < 7.5 ){
       			//cal.add(Calendar.HOUR, 0);
-      			cal.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
+      			calendar.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
       		 }
-      		 else if (lon > 7.5 && lon < 22.5){
+      		 else if (lon > 7.6 && lon < 22.5){
       			if (mine == true){
-      				TimeZone.getTimeZone("GMT-01:00");
+      				//cal.setTimeZone(TimeZone.getTimeZone("GMT-01:00"));
+      				calendar.add(Calendar.HOUR, 23);
          		 }
       			else
-      				TimeZone.getTimeZone("GMT+01:00");
+      				//cal.setTimeZone(TimeZone.getTimeZone("GMT+01:00"));
+      				calendar.add(Calendar.HOUR, 1);
       		 }
       		 else if (lon > 22.6 && lon < 37.5){
       			if (mine == true){
-      				TimeZone.getTimeZone("GMT-02:00");
+      				calendar.add(Calendar.HOUR, 22);
          		 }
       			else
-      			TimeZone.getTimeZone("GMT+02:00");
+      				calendar.add(Calendar.HOUR, 2);
       		 }
       		 else if (lon > 37.6 && lon < 52.5){
       			if (mine == true){
-      				TimeZone.getTimeZone("GMT-03:00");
+      				calendar.add(Calendar.HOUR, 21);
          		 }
       			else
-      				TimeZone.getTimeZone("GMT+03:00");
+      				calendar.add(Calendar.HOUR, 3);
       		 }
       		 else if(lon > 52.6 && lon < 67.5){
       			if (mine == true){
-      				TimeZone.getTimeZone("GMT-04:00");
+      				calendar.add(Calendar.HOUR, 20);
          		 }
       			else
-      				TimeZone.getTimeZone("GMT+04:00");
+      				calendar.add(Calendar.HOUR, 4);
       		 }
       		 else if(lon > 67.6 && lon < 82.5){
       			if (mine == true){
-      				TimeZone.getTimeZone("GMT-05:00");
+      				calendar.add(Calendar.HOUR, 19);
          		 }
       			else
-      				TimeZone.getTimeZone("GMT+05:00");
+      				calendar.add(Calendar.HOUR, 5);
       		 }
       		 else if (lon > 82.6 && lon < 97.5){
       			if (mine == true){
-      				TimeZone.getTimeZone("GMT-06:00");
+      				calendar.add(Calendar.HOUR, 18);
          		 }
       			else
-      				TimeZone.getTimeZone("GMT+06:00");
+      				calendar.add(Calendar.HOUR, 6);
       		 }
       		 else if (lon >97.6 && lon < 105){
       			if (mine == true){
-      				TimeZone.getTimeZone("GMT-07:00");
+      				calendar.add(Calendar.HOUR, 17);
          		 }
       			else
-      				TimeZone.getTimeZone("GMT+07:00");
+      				calendar.add(Calendar.HOUR, 7);
       		 }
       		 else if(lon > 105.1 && lon < 127.5){
       			if (mine == true){
-      				TimeZone.getTimeZone("GMT-08:00");
+      				calendar.add(Calendar.HOUR, 16);
          		 }
       			else
-      				TimeZone.getTimeZone("GMT+08:00");
+      				calendar.add(Calendar.HOUR, 8);
       		 }
       		 else if (lon > 127.6 && lon < 142.5){
       			if (mine == true){
-      				TimeZone.getTimeZone("GMT-09:00");
+      				calendar.add(Calendar.HOUR, 15);
          		 }
       			else
-      				TimeZone.getTimeZone("GMT+09:00");
+      				calendar.add(Calendar.HOUR, 9);
       		 }
       		 else if (lon > 142.6 && lon < 157.5){
       			if (mine == true){
-      				TimeZone.getTimeZone("GMT-10:00");
+      				calendar.add(Calendar.HOUR, 14);
          		 }
       			else
-      				TimeZone.getTimeZone("GMT+10:00");
+      				calendar.add(Calendar.HOUR, 10);
       		 }
       		 else if(lon > 157.6 && lon < 172.5){
       			if (mine == true){
-      				TimeZone.getTimeZone("GMT-11:00");
+      				calendar.add(Calendar.HOUR, 13);
          		 }
       			else
-      				TimeZone.getTimeZone("GMT+11:00");
+      				calendar.add(Calendar.HOUR, 11);
       		 }
       		 else if (lon > 172.6 && lon < 180){
       			if (mine == true){
-      				TimeZone.getTimeZone("GMT-12:00");
+      				calendar.add(Calendar.HOUR, 12);
          		 }
       			else
-      				TimeZone.getTimeZone("GMT+12:00");
+      				calendar.add(Calendar.HOUR, 12);
       		 }
+      		 
+      		/*if (y == true){
+      			calendar.add(Calendar.HOUR, 1);}*/
       			 
-      		Date date = cal.getTime();
+      		Date date = calendar.getTime();
    			String date1 = (new SimpleDateFormat("HH:mm")).format(date);
       		
       		
-   		 
-      		
-      		
+   		
+      		/*
       		map.put("name", city_b);
       		map.put("date", date1);
    			map.put("country", country);
-   			map.put("temp", temp);
+   			map.put("temp", temp+ "\u00B0");*/
    			item_details.setCity(city_b);
    			item_details.setTime(date1);
    			item_details.setCountry(country);
-   			item_details.setTemp(temp);
+   			item_details.setTemp(temp+ "\u00B0");
    			results.add(item_details);
 
    			
@@ -483,11 +502,11 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	protected void onPostExecute(Void result) {		
 ////WEATHER BASE	
 		try{
-		adapters = new SimpleAdapter(AllCityActivity.this, arraylist,
+		/*adapters = new SimpleAdapter(AllCityActivity.this, arraylist,
 	            R.layout.row_all_city, new String[] { "temp", "date",
 	                    "name", "country" }, new int[] { R.id.temp, R.id.time,
 	                    R.id.city, R.id.country });
-		
+		*/
 		lvMain.setAdapter(new ItemListBaseAdapter(AllCityActivity.this, results));
 		//lvMain.setAdapter(adapters);
 		setListViewHeightBasedOnChildren(lvMain);

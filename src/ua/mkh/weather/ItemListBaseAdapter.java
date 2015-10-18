@@ -3,6 +3,7 @@ package ua.mkh.weather;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,12 @@ class ItemListBaseAdapter extends BaseAdapter {
 	 
 	 
 	 private LayoutInflater l_Inflater;
+	 Context mContext;
 
 	 public ItemListBaseAdapter(Context context, ArrayList<ItemDetails> results) {
 	  itemDetailsrrayList = results;
 	  l_Inflater = LayoutInflater.from(context);
+	  mContext = context;
 	 }
 
 	 public int getCount() {
@@ -53,6 +56,28 @@ class ItemListBaseAdapter extends BaseAdapter {
 	   holder.txt_itemTime = (TextView) convertView.findViewById(R.id.time);
 	   holder.img = (ImageView) convertView.findViewById(R.id.imageView1);
 
+	   String roman = "fonts/Regular.otf";
+		String medium = "fonts/Medium.otf";
+		String bold =  "fonts/Bold.otf";
+		String thin = "fonts/Thin.otf";
+		String ultra = "fonts/Ultralight.otf";
+		
+		//Typeface typefaceThin = Typeface.createFromAsset(getAssets(), thin);
+		
+		Typeface type = Typeface.createFromAsset(mContext.getAssets(),
+               "fonts/Thin.otf"); 
+		Typeface typeRoman = Typeface.createFromAsset(mContext.getAssets(),
+	               "fonts/Regular.otf"); 
+		
+	   holder.txt_itemCity.setTypeface(typeRoman);
+	   holder.txt_itemCountry.setTypeface(typeRoman);
+	   holder.txt_itemTemp.setTypeface(type);
+	   holder.txt_itemTime.setTypeface(typeRoman);
+	   
+	 
+	   
+	   
+	   
 	   convertView.setTag(holder);
 	  } else {
 	   holder = (ViewHolder) convertView.getTag();

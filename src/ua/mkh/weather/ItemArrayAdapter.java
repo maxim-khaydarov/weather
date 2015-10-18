@@ -1,6 +1,7 @@
 package ua.mkh.weather;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,8 @@ public class ItemArrayAdapter extends ArrayAdapter<String[]> {
 
     @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+    	
+    	
 		View row = convertView;
         ItemViewHolder viewHolder;
 		if (row == null) {
@@ -51,6 +54,9 @@ public class ItemArrayAdapter extends ArrayAdapter<String[]> {
             viewHolder.name = (TextView) row.findViewById(R.id.name);
             viewHolder.id = (TextView) row.findViewById(R.id.id_c);
             viewHolder.country = (TextView) row.findViewById(R.id.country);
+            
+            
+            
             row.setTag(viewHolder);
 		} else {
             viewHolder = (ItemViewHolder)row.getTag();

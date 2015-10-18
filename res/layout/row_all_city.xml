@@ -18,6 +18,7 @@
 
     <TextView
         android:id="@+id/temp"
+        style="@style/ShadowText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -25,7 +26,7 @@
         android:layout_marginRight="15dp"
         android:text="25"
         android:textColor="@color/white"
-        android:textSize="45sp" />
+        android:textSize="69sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -36,8 +37,10 @@
 
         <TextView
             android:id="@+id/time"
+            style="@style/ShadowText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:text="12:25"
             android:textColor="@color/white"
             android:textSize="16sp" />
@@ -45,24 +48,26 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" >
+            android:layout_marginTop="5dp" >
 
             <TextView
                 android:id="@+id/city"
+                style="@style/ShadowText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Kiev"
                 android:textColor="@color/white"
-                android:textSize="25sp" />
+                android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/country"
+                style="@style/ShadowText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="7dp"
                 android:text="UA"
                 android:textColor="@color/white"
-                android:textSize="25sp" />
+                android:textSize="30sp" />
 
         </LinearLayout>
     </LinearLayout>
