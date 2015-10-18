@@ -9,6 +9,7 @@ public class ItemDetails {
 	private String temp;
 	private String time;
 	private String weather;
+	private String cityid;
 
 public String getCity() {
 return city;
@@ -16,6 +17,12 @@ return city;
 public void setCity(String city) {
 this.city = city;
 Log.d("DD", "ADD CITY");
+}
+public String getCityId() {
+return cityid;
+}
+public void setCityId(String cityid) {
+this.cityid = cityid;
 }
 public String getCountry() {
 return country;

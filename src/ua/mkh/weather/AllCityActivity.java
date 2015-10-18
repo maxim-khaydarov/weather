@@ -29,12 +29,14 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager.LayoutParams;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -54,6 +56,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	
 	Typeface typefaceRoman, typefaceMedium, typefaceBold, typefaceThin, typefaceUltra;
 	public static final String APP_PREFERENCES = "mysettings"; 
+	public static final String APP_PREFERENCES_CITY = "mysettings_city";
 	SharedPreferences mSettings;
 	ListView lvMain;
 	Button btn_plus, btn_c_f;
@@ -159,11 +162,30 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 				Object o = lvMain.getItemAtPosition(position);
 				
 				ItemDetails obj_itemDetails = (ItemDetails)o;
-				Toast.makeText(AllCityActivity.this, "You have chosen : " + " " + obj_itemDetails.getCity(), Toast.LENGTH_LONG).show();
-				
+				Toast.makeText(AllCityActivity.this, "You have chosen : " + " " + obj_itemDetails.getCityId(), Toast.LENGTH_LONG).show();
+				Editor editor = mSettings.edit();
+			   	editor.putString(APP_PREFERENCES_CITY, obj_itemDetails.getCityId()).commit();
+			   	Intent intent = new Intent(AllCityActivity.this, MainActivity.class);
+       	    	startActivity(intent);
 				}
 				
 				});
+			
+			lvMain.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+	            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+	                    int pos, long id) {
+	                // TODO Auto-generated method stub
+
+	            	//Toast.makeText(AllCityActivity.this, pos, Toast.LENGTH_LONG).show();
+	            	
+	            	
+	            	mDatabaseHelper.deleteBook(list.get(pos));
+	            	results.remove(pos);
+	            	lvMain.setAdapter(new ItemListBaseAdapter(AllCityActivity.this, results));
+	                return true;
+	            }
+	        }); 
 
 
 		 //load_base();
@@ -335,10 +357,11 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    			
    			
    			String city_b = JSONWeather.getString("name");
+   			String city_id = JSONWeather.getString("id");
    			Log.e("name", city_b);
       		// long dt = JSONWeather.getLong("dt");
       		 
-   			//boolean y = TimeZone.getDefault().inDaylightTime( new Date() );
+   			boolean y = TimeZone.getDefault().inDaylightTime( new Date() );
    			
    			
    			
@@ -456,8 +479,8 @@ public class AllCityActivity extends Activity  implements OnClickListener{
       				calendar.add(Calendar.HOUR, 12);
       		 }
       		 
-      		/*if (y == true){
-      			calendar.add(Calendar.HOUR, 1);}*/
+      		if (y == true){
+      			calendar.add(Calendar.HOUR, 1);}
       			 
       		Date date = calendar.getTime();
    			String date1 = (new SimpleDateFormat("HH:mm")).format(date);
@@ -473,6 +496,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    			item_details.setTime(date1);
    			item_details.setCountry(country);
    			item_details.setTemp(temp+ "\u00B0");
+   			item_details.setCityId(city_id);
    			results.add(item_details);
 
    			
@@ -494,10 +518,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	
 	
 	
-	private String ValueOf(int round) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	@Override
 	protected void onPostExecute(Void result) {		
 ////WEATHER BASE	
@@ -549,6 +570,18 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	}
 	
 	
-	
+	 @Override
+	    public boolean onKeyDown(int keycode, KeyEvent e) {
+	        switch(keycode) {
+	            
+	            case KeyEvent.KEYCODE_BACK:
+	            	Intent intent18 = new Intent(this, MainActivity.class);
+	             	 startActivity(intent18);
+
+	                return true;
+	            
+	        }
+	        return super.onKeyDown(keycode, e);
+	   }
 	 
 }

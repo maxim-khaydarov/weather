@@ -181,7 +181,7 @@ public class PreferenceActivity extends Activity  implements OnClickListener{
                 	   //Log.d("!!", i);
                 	   mDatabaseHelperCity.addBook(new City(i)); 
                 	   
-               		   	Intent intent = new Intent(PreferenceActivity.this, MainActivity.class);
+               		   	Intent intent = new Intent(PreferenceActivity.this, AllCityActivity.class);
                	    	startActivity(intent);
                            //Toast.makeText(getApplicationContext(), "Animal Selected : "+selectedAnimal,   Toast.LENGTH_LONG).show();
                         }

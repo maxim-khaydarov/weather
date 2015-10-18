@@ -1061,16 +1061,16 @@ protected void onResume() {
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.clear_sky_d));
     	 	}
     	 	
-    	 	//String city = mSettings.getString(APP_PREFERENCES_CITY, "2172797");
+    	 	String city = mSettings.getString(APP_PREFERENCES_CITY, "2172797");
 			//city = city.replace(" ","_");
 			//Log.i("", city);
 			
 			//String adress = mSettings.getString(APP_PREFERENCES_ADRESS, "q");
 			//Log.d("", adress);
 			
-			url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + "2172797" + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
-			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + "2172797" + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
-			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + "2172797" + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
+			url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + city + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
+			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + city + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
+			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + city + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
 			
     	 	check_int();
     	 	
@@ -1113,10 +1113,11 @@ public void check_int(){
 public boolean onKeyDown(int keycode, KeyEvent e) {
     switch(keycode) {
         case KeyEvent.KEYCODE_BACK:
+        	System.exit(0);/*
         	Intent intent = new Intent(Intent.ACTION_MAIN);
         	intent.addCategory(Intent.CATEGORY_HOME);
         	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        	startActivity(intent);
+        	startActivity(intent);*/
         	return true;
     }
     return super.onKeyDown(keycode, e);
@@ -1207,6 +1208,8 @@ private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
 	    super.onPause();
 	    this.unregisterReceiver(mBatInfoReceiver);
   }
+  
+  
   
 
 }
