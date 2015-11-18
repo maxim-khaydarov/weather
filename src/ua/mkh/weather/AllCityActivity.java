@@ -326,7 +326,8 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    			map = new HashMap<String, String>();
    			
    			JSONObject cordObj = JSONWeather.getJSONObject("coord");
-   			int lon = cordObj.getInt("lon");
+   			String lon = cordObj.getString("lon");
+   			Log.e("LON", lon);
    			
    			
    			JSONObject sysObj = JSONWeather.getJSONObject("sys");
@@ -382,17 +383,17 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    			
       		 
       		 boolean mine = false;
-      		
-      		 if (lon < 0){
+      		float ll = Float.parseFloat(lon);
+      		 if (ll < 0){
       			mine = true;
-      			lon = lon * -1;
+      			ll = ll * -1;
       		 }
       		 
-      		 if(lon < 7.5 ){
+      		 if(ll < 7.5 ){
       			//cal.add(Calendar.HOUR, 0);
       			calendar.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
       		 }
-      		 else if (lon > 7.6 && lon < 22.5){
+      		 else if (ll > 7.6 && ll < 22.5){
       			if (mine == true){
       				//cal.setTimeZone(TimeZone.getTimeZone("GMT-01:00"));
       				calendar.add(Calendar.HOUR, 23);
@@ -401,86 +402,88 @@ public class AllCityActivity extends Activity  implements OnClickListener{
       				//cal.setTimeZone(TimeZone.getTimeZone("GMT+01:00"));
       				calendar.add(Calendar.HOUR, 1);
       		 }
-      		 else if (lon > 22.6 && lon < 37.5){
+      		 else if (ll > 22.6 && ll < 37.5){
+      			 Log.d("LON", "> 22.6 and <37.5");
       			if (mine == true){
       				calendar.add(Calendar.HOUR, 22);
          		 }
       			else
       				calendar.add(Calendar.HOUR, 2);
       		 }
-      		 else if (lon > 37.6 && lon < 52.5){
+      		 else if (ll > 37.6 && ll < 52.5){
+      			 Log.d("LON", "> 37.6 and <52.5");
       			if (mine == true){
       				calendar.add(Calendar.HOUR, 21);
          		 }
       			else
       				calendar.add(Calendar.HOUR, 3);
       		 }
-      		 else if(lon > 52.6 && lon < 67.5){
+      		 else if(ll > 52.6 && ll < 67.5){
       			if (mine == true){
       				calendar.add(Calendar.HOUR, 20);
          		 }
       			else
       				calendar.add(Calendar.HOUR, 4);
       		 }
-      		 else if(lon > 67.6 && lon < 82.5){
+      		 else if(ll > 67.6 && ll < 82.5){
       			if (mine == true){
       				calendar.add(Calendar.HOUR, 19);
          		 }
       			else
       				calendar.add(Calendar.HOUR, 5);
       		 }
-      		 else if (lon > 82.6 && lon < 97.5){
+      		 else if (ll > 82.6 && ll < 97.5){
       			if (mine == true){
       				calendar.add(Calendar.HOUR, 18);
          		 }
       			else
       				calendar.add(Calendar.HOUR, 6);
       		 }
-      		 else if (lon >97.6 && lon < 105){
+      		 else if (ll >97.6 && ll < 105){
       			if (mine == true){
       				calendar.add(Calendar.HOUR, 17);
          		 }
       			else
       				calendar.add(Calendar.HOUR, 7);
       		 }
-      		 else if(lon > 105.1 && lon < 127.5){
+      		 else if(ll > 105.1 && ll < 127.5){
       			if (mine == true){
       				calendar.add(Calendar.HOUR, 16);
          		 }
       			else
       				calendar.add(Calendar.HOUR, 8);
       		 }
-      		 else if (lon > 127.6 && lon < 142.5){
+      		 else if (ll > 127.6 && ll < 142.5){
       			if (mine == true){
       				calendar.add(Calendar.HOUR, 15);
          		 }
       			else
       				calendar.add(Calendar.HOUR, 9);
       		 }
-      		 else if (lon > 142.6 && lon < 157.5){
+      		 else if (ll > 142.6 && ll < 157.5){
       			if (mine == true){
       				calendar.add(Calendar.HOUR, 14);
          		 }
       			else
       				calendar.add(Calendar.HOUR, 10);
       		 }
-      		 else if(lon > 157.6 && lon < 172.5){
+      		 else if(ll > 157.6 && ll < 172.5){
       			if (mine == true){
       				calendar.add(Calendar.HOUR, 13);
          		 }
       			else
       				calendar.add(Calendar.HOUR, 11);
       		 }
-      		 else if (lon > 172.6 && lon < 180){
+      		 else if (ll > 172.6 && ll < 180){
       			if (mine == true){
       				calendar.add(Calendar.HOUR, 12);
          		 }
       			else
       				calendar.add(Calendar.HOUR, 12);
       		 }
-      		 
+      		 /*
       		if (y == true){
-      			calendar.add(Calendar.HOUR, 1);}
+      			calendar.add(Calendar.HOUR, 1);}*/
       			 
       		Date date = calendar.getTime();
    			String date1 = (new SimpleDateFormat("HH:mm")).format(date);
