@@ -32,8 +32,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="-5dp"
+            android:shadowColor="#50000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
             android:text="TextView"
-            android:textColor="@color/blue"
+            android:textColor="@color/blue_day"
             android:textSize="11sp" />
 
     </LinearLayout>

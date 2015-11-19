@@ -78,6 +78,13 @@ public class ListViewAdapterDailyHum extends BaseAdapter {
 		time.setTypeface(typefaceThin);
 		temp.setTypeface(typefaceRoman);
 		
+		//int tim = Integer.parseInt(resultp.get(MainActivity.TIME));
+		/*
+		if (tim >= 05 && tim <= 20){
+			hum.setTextColor(context.getResources().getColor(R.color.blue_day));
+		}
+		
+		*/
  
 		// Locate the ImageView in listview_item.xml
 		//flag = (ImageView) itemView.findViewById(R.id.flag);

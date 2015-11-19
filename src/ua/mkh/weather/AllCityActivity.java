@@ -342,9 +342,13 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    			JSONObject JSONWeather2 = sysObjWeather.getJSONObject(k);
    			String description = JSONWeather2.getString("description");
    			String main = JSONWeather2.getString("main");
-   			map.put("description", description);
+   			int id = JSONWeather2.getInt("id");
+   			String icon = JSONWeather2.getString("icon").substring(2);
+   			//map.put("description", description);
    			item_details.setWeather(description);
-   			map.put("main", main);
+   			item_details.setIcon(icon);
+   			item_details.setId(String.valueOf(id));
+   			//map.put("main", main);
    			Log.e("main", main);
    			}
    			
@@ -503,7 +507,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    			results.add(item_details);
 
    			
-   			arraylist.add(map);
+   			//arraylist.add(map);
    		}
    		
    		

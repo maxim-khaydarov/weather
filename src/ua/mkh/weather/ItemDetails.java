@@ -10,6 +10,9 @@ public class ItemDetails {
 	private String time;
 	private String weather;
 	private String cityid;
+	private String icon;
+	private String id;
+	
 
 public String getCity() {
 return city;
@@ -17,6 +20,18 @@ return city;
 public void setCity(String city) {
 this.city = city;
 Log.d("DD", "ADD CITY");
+}
+public String getIcon() {
+return icon;
+}
+public void setIcon(String icon) {
+this.icon = icon;
+}
+public String getId() {
+return id;
+}
+public void setId(String id) {
+this.id = id;
 }
 public String getCityId() {
 return cityid;

@@ -44,6 +44,7 @@
 	<color name="dark_blue">#24223d</color>
 	<color name="blue_fon">#413f60</color>
 	<color name="blue">#55a9d2</color>
+	<color name="blue_day">#c4e4f3</color>
 	
 	<style name="TwoWayView">
     <item name="android:orientation">horizontal</item>

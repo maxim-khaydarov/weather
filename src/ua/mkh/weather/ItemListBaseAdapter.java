@@ -89,6 +89,21 @@ class ItemListBaseAdapter extends BaseAdapter {
 	  holder.txt_itemTime.setText(itemDetailsrrayList.get(position).getTime());
 	  
 	  String s = itemDetailsrrayList.get(position).getWeather();
+	  
+	  if (itemDetailsrrayList.get(position).getIcon().contains("d")){
+		  if(itemDetailsrrayList.get(position).getIcon().contains("500")){
+			  
+		  }
+		  else if(itemDetailsrrayList.get(position).getIcon().contains("501")){
+			  
+		  }
+		  else if (itemDetailsrrayList.get(position).getIcon().contains("800")){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.clear_sky_d_m));
+		  }
+	  }
+	  else{
+		  
+	  }
 
 	  return convertView;
 	 }
