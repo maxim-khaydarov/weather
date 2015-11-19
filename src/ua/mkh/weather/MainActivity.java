@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -120,6 +121,7 @@ public class MainActivity extends Activity  implements OnClickListener {
 	HorizontalListView listview;
 	ListViewAdapter adapter;
 	ListViewAdapterDaily adapter_daily;
+	ListViewAdapterDailyHum adapter_daily_hum;
 	JSONObject jsonobject;
 	JSONObject jsonobject_d;
 	JSONObject jsonobject_b;
@@ -137,7 +139,9 @@ public class MainActivity extends Activity  implements OnClickListener {
 	static String TIME = "time";
 	static String IC = "ic";
 	static String TEMP = "temp";
+	static String HUM = "hum";
 	
+	int daily_hum = 0;
 	
 	TelephonyManager telephonyManager;
 	myPhoneStateListener psListener;
@@ -362,6 +366,8 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         			 
         			 JSONObject jTempObj = jDayForecast.getJSONObject("main"); 
         			 int t = jTempObj.getInt("temp");	 
+        			 int hum = jTempObj.getInt("humidity");
+        			 
         			 int temp = Math.round(t);
         			 
         			 JSONArray jWeatherArr = jDayForecast.getJSONArray("weather");
@@ -370,14 +376,19 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         			 
         			 HashMap<String, String> map = new HashMap<String, String>();
         			 if (i == 0){
+        				 if (hum >= 80){
+            				 daily_hum = 1;
+            			 }
         			 map.put("time", getString(R.string.now));
         			 map.put("temp", Integer.toString(temp));
         			 map.put("ic", icon);
+        			 map.put("hum", String.valueOf(hum));
         			 }
         			 else {
         				 map.put("time", formattedDate);
             			 map.put("temp", Integer.toString(temp));
             			 map.put("ic", icon);
+            			 map.put("hum", String.valueOf(hum));
         			 }
         			 
         			// Log.d("date", upperString);
@@ -423,13 +434,14 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
    		
    		
    		
-   		
+   		int id = 0;
    		 //Loop the Array
    		for (int i = 0; i < list.length(); i++) {
    			JSONObject JSONWeather = list.getJSONObject(i);
    			String description_b = JSONWeather.getString("description");
    			String main_b = JSONWeather.getString("main");
    			String icon_b = JSONWeather.getString("icon").substring(2);
+   		    id = JSONWeather.getInt("id");
    			arraylist_base.add(description_b);//0
    			arraylist_base.add(main_b);//1
    			arraylist_base.add(icon_b);//2
@@ -473,6 +485,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		  arraylist_base.add(formattedDateSunrise);//10
 		  arraylist_base.add(formattedDateSunset);//11
 		  arraylist_base.add(country);//12
+		  arraylist_base.add(String.valueOf(id));//13
 		  
 		}
 		catch (JSONException e){
@@ -562,60 +575,60 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		try{
 		if (arraylist_base .get(2).contains("d")){
 		
-		if (arraylist_base .get(1).contains("Rain")){
-			if (arraylist_base .get(0).contains("light rain")){
+		if (arraylist_base .get(0).contains("Rain")){
+			if (arraylist_base .get(13).contains("500")){
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.light_rain_d));
 				 img1.setTag(R.drawable.d09d);
-				 condDescr.setText(R.string.light_rain);
-				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.light_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-				 nnn = getString(R.string.now) + " " + getString(R.string.light_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+				// condDescr.setText(R.string.light_rain);
+				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+				 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 				 Editor editor = mSettings.edit();
 				   	editor.putString(APP_PREFERENCES_WEATHER, "light_rain").commit();
 			}
-			else if (arraylist_base .get(0).contains("moderate rain")){
+			else if (arraylist_base .get(13).contains("501")){
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.moderate_rain_d));
 				 img1.setTag(R.drawable.d09d);
-				 condDescr.setText(R.string.moderate_rain);
-				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.moderate_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-				 nnn = getString(R.string.now) + " " + getString(R.string.moderate_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+				// condDescr.setText(R.string.moderate_rain);
+				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+				 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 				 Editor editor = mSettings.edit();
 				   	editor.putString(APP_PREFERENCES_WEATHER, "moderate_rain").commit();
 			}
 			else {
 				img1.setImageDrawable(getResources().getDrawable(R.drawable.heavy_intensity_rain_d));
 				 img1.setTag(R.drawable.d09d);
-				condDescr.setText(R.string.heavy_intensity_rain);
-				textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.heavy_intensity_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-				nnn = getString(R.string.now) + " " + getString(R.string.heavy_intensity_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+				//condDescr.setText(R.string.heavy_intensity_rain);
+				textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+				nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 				Editor editor = mSettings.edit();
 			   	editor.putString(APP_PREFERENCES_WEATHER, "heavy_intensity_rain").commit();
 			}
 			}
 		else if (arraylist_base .get(1).contains("Clouds")){
-				if (arraylist_base .get(0).contains("few clouds")){
+				if (arraylist_base .get(13).contains("801")){
 					 img1.setImageDrawable(getResources().getDrawable(R.drawable.few_clouds_d));
 					 img1.setTag(R.drawable.d03d);
-					 condDescr.setText(R.string.few_clouds);
-					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.few_clouds) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-					 nnn = getString(R.string.now) + " " + getString(R.string.few_clouds) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+				//	 condDescr.setText(R.string.few_clouds);
+					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+					 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 					 Editor editor = mSettings.edit();
 					   	editor.putString(APP_PREFERENCES_WEATHER, "few_clouds").commit();
 				}
-				else if (arraylist_base .get(0).contains("scattered_clouds")){
+				else if (arraylist_base .get(13).contains("802")){
 					 img1.setImageDrawable(getResources().getDrawable(R.drawable.scattered_clouds_d));
 					 img1.setTag(R.drawable.d03d);
-					 condDescr.setText(R.string.scattered_clouds);
-					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.scattered_clouds) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-					 nnn = getString(R.string.now) + " " + getString(R.string.scattered_clouds) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+				//	 condDescr.setText(R.string.scattered_clouds);
+					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+					 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 					 Editor editor = mSettings.edit();
 					   	editor.putString(APP_PREFERENCES_WEATHER, "scattered_clouds").commit();
 				}
 				else {
 					 img1.setImageDrawable(getResources().getDrawable(R.drawable.broken_clouds_d));
 					 img1.setTag(R.drawable.d03d);
-					 condDescr.setText(R.string.broken_clouds);
-					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.broken_clouds) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-					 nnn = getString(R.string.now) + " " + getString(R.string.broken_clouds) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+				//	 condDescr.setText(R.string.broken_clouds);
+					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+					 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 					 Editor editor = mSettings.edit();
 					   	editor.putString(APP_PREFERENCES_WEATHER, "broken_clouds").commit();
 					 
@@ -624,37 +637,37 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		else if (arraylist_base .get(1).contains("Clear")){
 			 img1.setImageDrawable(getResources().getDrawable(R.drawable.clear_sky_d));
 			 img1.setTag(R.drawable.d01d);
-			 condDescr.setText(R.string.clear_sky);
-			 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.clear_sky) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-			 nnn = getString(R.string.now) + " " + getString(R.string.clear_sky) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+			// condDescr.setText(R.string.clear_sky);
+			 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+			 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 			 Editor editor = mSettings.edit();
 			   	editor.putString(APP_PREFERENCES_WEATHER, "clear_sky").commit();
 		}	
 		else if (arraylist_base .get(1).contains("Snow")){
-			if (arraylist_base .get(0).contains("light snow")){
+			if (arraylist_base .get(13).contains("600")){
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.snow_d));
 				 img1.setTag(R.drawable.d13d);
-				 condDescr.setText(R.string.light_snow);
-				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.light_snow) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-				 nnn = getString(R.string.now) + " " + getString(R.string.light_snow) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+		//		 condDescr.setText(R.string.light_snow);
+				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " +arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+				 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 				 Editor editor = mSettings.edit();
 				   	editor.putString(APP_PREFERENCES_WEATHER, "Snow").commit();
 			}
-			else if (arraylist_base .get(0).contains("snow")){
+			else if (arraylist_base .get(13).contains("601")){
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.snow_d));
 				 img1.setTag(R.drawable.d13d);
-				 condDescr.setText(R.string.snow);
-				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.snow) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-				 nnn = getString(R.string.now) + " " + getString(R.string.snow) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+			//	 condDescr.setText(R.string.snow);
+				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+				 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 				 Editor editor = mSettings.edit();
 				   	editor.putString(APP_PREFERENCES_WEATHER, "Snow").commit();
 			}
 			else {
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.snow_d));
 				 img1.setTag(R.drawable.d13d);
-				 condDescr.setText(R.string.heavy_snow);
-				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.heavy_snow) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-				 nnn = getString(R.string.now) + " " + getString(R.string.heavy_snow) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+		//		 condDescr.setText(R.string.heavy_snow);
+				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+				 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 				 Editor editor = mSettings.edit();
 				   	editor.putString(APP_PREFERENCES_WEATHER, "Snow").commit();
 			}
@@ -662,104 +675,104 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		else if (arraylist_base .get(1).contains("Thunderstorm")){
 			 img1.setImageDrawable(getResources().getDrawable(R.drawable.thunderstorm));
 			 img1.setTag(R.drawable.d11d);
-			 condDescr.setText(R.string.light_intensity_shower_rain);
-			 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.light_intensity_shower_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-			 nnn = getString(R.string.now) + " " + getString(R.string.light_intensity_shower_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+		//	 condDescr.setText(R.string.light_intensity_shower_rain);
+			 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+			 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 			 Editor editor = mSettings.edit();
 			   	editor.putString(APP_PREFERENCES_WEATHER, "Thunderstorm").commit();
 		}
 		else if (arraylist_base .get(1).contains("Drizzle")){
 			 img1.setImageDrawable(getResources().getDrawable(R.drawable.light_rain_d));
 			 img1.setTag(R.drawable.d10d);
-			 condDescr.setText(R.string.drizzle);
-			 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.drizzle) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-			 nnn = getString(R.string.now) + " " + getString(R.string.drizzle) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+		//	 condDescr.setText(R.string.drizzle);
+			 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+			 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 			 Editor editor = mSettings.edit();
 			   	editor.putString(APP_PREFERENCES_WEATHER, "Drizzle").commit();
 		}
 		else if (arraylist_base .get(1).contains("Atmosphere")){
 			 img1.setImageDrawable(getResources().getDrawable(R.drawable.few_clouds_d));
 			 img1.setTag(R.drawable.d03d);
-			 condDescr.setText(R.string.mist);
-			 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.mist) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-			 nnn = getString(R.string.now) + " " + getString(R.string.mist) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+		//	 condDescr.setText(R.string.mist);
+			 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+			 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 			 Editor editor = mSettings.edit();
 			   	editor.putString(APP_PREFERENCES_WEATHER, "Atmosphere").commit();
 		}
 		else if (arraylist_base .get(1).contains("Extreme")){
 			 img1.setImageDrawable(getResources().getDrawable(R.drawable.thunderstorm));
 			 img1.setTag(R.drawable.d11d);
-			 condDescr.setText(R.string.mist);
-			 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.light_intensity_shower_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-			 nnn = getString(R.string.now) + " " + getString(R.string.light_intensity_shower_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+		//	 condDescr.setText(R.string.mist);
+			 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+			 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 			 Editor editor = mSettings.edit();
 			   	editor.putString(APP_PREFERENCES_WEATHER, "Extreme").commit();
 		}
 		else if (arraylist_base .get(1).contains("Additional")){
 			 img1.setImageDrawable(getResources().getDrawable(R.drawable.clear_sky_d));
 			 img1.setTag(R.drawable.d02d);
-			 condDescr.setText(R.string.mist);
-			 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.clear_sky) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-			 nnn = getString(R.string.now) + " " + getString(R.string.clear_sky) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+		//	 condDescr.setText(R.string.mist);
+			 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+			 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 			 Editor editor = mSettings.edit();
 			   	editor.putString(APP_PREFERENCES_WEATHER, "Additional").commit();
 		}
 		}
 		else {
 			if (arraylist_base .get(1).contains("Rain")){
-				if (arraylist_base .get(0).contains("light rain")){
+				if (arraylist_base .get(13).contains("500")){
 					 img1.setImageDrawable(getResources().getDrawable(R.drawable.light_rain_n));
 					 img1.setTag(R.drawable.d09d);
-					 condDescr.setText(R.string.light_rain);
-					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.light_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-					 nnn = getString(R.string.now) + " " + getString(R.string.light_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+		//			 condDescr.setText(R.string.light_rain);
+					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+					 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 					 Editor editor = mSettings.edit();
 					   	editor.putString(APP_PREFERENCES_WEATHER, "light_rain").commit();
 				}
-				else if (arraylist_base .get(0).contains("moderate rain")){
+				else if (arraylist_base .get(13).contains("501")){
 					 img1.setImageDrawable(getResources().getDrawable(R.drawable.moderate_rain_n));
 					 img1.setTag(R.drawable.d09d);
-					 condDescr.setText(R.string.moderate_rain);
-					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.moderate_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-					 nnn = getString(R.string.now) + " " + getString(R.string.moderate_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " ;
+			//		 condDescr.setText(R.string.moderate_rain);
+					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+					 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " ;
 					 Editor editor = mSettings.edit();
 					   	editor.putString(APP_PREFERENCES_WEATHER, "moderate_rain").commit();
 				}
 				else {
 					img1.setImageDrawable(getResources().getDrawable(R.drawable.heavy_intensity_rain_n));
 					 img1.setTag(R.drawable.d09d);
-					condDescr.setText(R.string.heavy_intensity_rain);
-					textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.heavy_intensity_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-					nnn = getString(R.string.now) + " " + getString(R.string.heavy_intensity_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+			//		condDescr.setText(R.string.heavy_intensity_rain);
+					textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+					nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 					Editor editor = mSettings.edit();
 				   	editor.putString(APP_PREFERENCES_WEATHER, "heavy_intensity_rain").commit();
 				}
 				}
 			else if (arraylist_base .get(1).contains("Clouds")){
-					if (arraylist_base .get(0).contains(getResources().getString(R.string.few_clouds))){
+					if (arraylist_base .get(13).contains("801")){
 						 img1.setImageDrawable(getResources().getDrawable(R.drawable.few_clouds_n));
 						 img1.setTag(R.drawable.d03d);
-						 condDescr.setText(R.string.few_clouds);
-						 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.few_clouds) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-						 nnn = getString(R.string.now) + " " + getString(R.string.few_clouds) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+				//		 condDescr.setText(R.string.few_clouds);
+						 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+						 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 						 Editor editor = mSettings.edit();
 						   	editor.putString(APP_PREFERENCES_WEATHER, "few_clouds").commit();
 					}
-					else if (arraylist_base .get(0).contains("scattered_clouds")){
+					else if (arraylist_base .get(13).contains("802")){
 						 img1.setImageDrawable(getResources().getDrawable(R.drawable.scattered_clouds_n));
 						 img1.setTag(R.drawable.d03d);
-						 condDescr.setText(R.string.scattered_clouds);
-						 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.scattered_clouds) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-						 nnn = getString(R.string.now) + " " + getString(R.string.scattered_clouds) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+				//		 condDescr.setText(R.string.scattered_clouds);
+						 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+						 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 						 Editor editor = mSettings.edit();
 						   	editor.putString(APP_PREFERENCES_WEATHER, "scattered_clouds").commit();
 					}
 					else {
 						 img1.setImageDrawable(getResources().getDrawable(R.drawable.broken_clouds_n));
 						 img1.setTag(R.drawable.d03d);
-						 condDescr.setText(R.string.broken_clouds);
-						 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.broken_clouds) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-						 nnn = getString(R.string.now) + " " + getString(R.string.broken_clouds) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+				//		 condDescr.setText(R.string.broken_clouds);
+						 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+						 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 						 Editor editor = mSettings.edit();
 						   	editor.putString(APP_PREFERENCES_WEATHER, "broken_clouds").commit();
 					}
@@ -767,37 +780,37 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 			else if (arraylist_base .get(1).contains("Clear")){
 					 img1.setImageDrawable(getResources().getDrawable(R.drawable.clear_sky_n));
 					 img1.setTag(R.drawable.n01n);
-					 condDescr.setText(R.string.clear_sky);
-					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.clear_sky) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-					 nnn = getString(R.string.now) + " " + getString(R.string.clear_sky) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+				//	 condDescr.setText(R.string.clear_sky);
+					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+					 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 					 Editor editor = mSettings.edit();
 					   	editor.putString(APP_PREFERENCES_WEATHER, "clear_sky").commit();
 			}
 			else if (arraylist_base .get(1).contains("Snow")){
-				if (arraylist_base .get(0).contains("light snow")){
+				if (arraylist_base .get(13).contains("600")){
 					 img1.setImageDrawable(getResources().getDrawable(R.drawable.snow_n));
 					 img1.setTag(R.drawable.n13n);
-					 condDescr.setText(R.string.light_snow);
-					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.light_snow) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-					 nnn = getString(R.string.now) + " " + getString(R.string.light_snow) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+				//	 condDescr.setText(R.string.light_snow);
+					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+					 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 					 Editor editor = mSettings.edit();
 					   	editor.putString(APP_PREFERENCES_WEATHER, "Snow").commit();
 				}
-				else if (arraylist_base .get(0).contains("snow")){
+				else if (arraylist_base .get(13).contains("601")){
 					 img1.setImageDrawable(getResources().getDrawable(R.drawable.snow_n));
 					 img1.setTag(R.drawable.n13n);
-					 condDescr.setText(R.string.snow);
-					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.snow) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-					 nnn = getString(R.string.now) + " " + getString(R.string.snow) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+			//		 condDescr.setText(R.string.snow);
+					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+					 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 					 Editor editor = mSettings.edit();
 					   	editor.putString(APP_PREFERENCES_WEATHER, "Snow").commit();
 				}
 				else {
 					 img1.setImageDrawable(getResources().getDrawable(R.drawable.snow_n));
 					 img1.setTag(R.drawable.n13n);
-					 condDescr.setText(R.string.heavy_snow);
-					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.heavy_snow) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-					 nnn = getString(R.string.now) + " " + getString(R.string.heavy_snow) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+				//	 condDescr.setText(R.string.heavy_snow);
+					 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+					 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 					 Editor editor = mSettings.edit();
 					   	editor.putString(APP_PREFERENCES_WEATHER, "Snow").commit();
 				}
@@ -805,45 +818,45 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 			else if (arraylist_base .get(1).contains("Thunderstorm")){
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.thunderstorm));
 				 img1.setTag(R.drawable.n11n);
-				 condDescr.setText(R.string.light_intensity_shower_rain);
-				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.light_intensity_shower_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-				 nnn = getString(R.string.now) + " " + getString(R.string.light_intensity_shower_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+			//	 condDescr.setText(R.string.light_intensity_shower_rain);
+				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+				 nnn = getString(R.string.now) + " " + arraylist_base .get(0)+ ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 				 Editor editor = mSettings.edit();
 				   	editor.putString(APP_PREFERENCES_WEATHER, "Thunderstorm").commit();
 			}
 			else if (arraylist_base .get(1).contains("Drizzle")){
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.light_rain_n));
 				 img1.setTag(R.drawable.n11n);
-				 condDescr.setText(R.string.drizzle);
-				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.drizzle) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-				 nnn = getString(R.string.now) + " " + getString(R.string.drizzle) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+			//	 condDescr.setText(R.string.drizzle);
+				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+				 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 				 Editor editor = mSettings.edit();
 				   	editor.putString(APP_PREFERENCES_WEATHER, "Drizzle").commit();
 			}
 			else if (arraylist_base .get(1).contains("Atmosphere")){
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.few_clouds_n));
 				 img1.setTag(R.drawable.n03n);
-				 condDescr.setText(R.string.mist);
-				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.mist) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-				 nnn = getString(R.string.now) + " " + getString(R.string.mist) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+		//		 condDescr.setText(R.string.mist);
+				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+				 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 				 Editor editor = mSettings.edit();
 				   	editor.putString(APP_PREFERENCES_WEATHER, "Atmosphere").commit();
 			}
 			else if (arraylist_base .get(1).contains("Extreme")){
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.thunderstorm));
 				 img1.setTag(R.drawable.n11n);
-				 condDescr.setText(R.string.mist);
-				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.light_intensity_shower_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-				 nnn = getString(R.string.now) + " " + getString(R.string.light_intensity_shower_rain) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
+		//		 condDescr.setText(R.string.mist);
+				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " +arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+				 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". ";
 				 Editor editor = mSettings.edit();
 				   	editor.putString(APP_PREFERENCES_WEATHER, "Extreme").commit();
 			}
 			else if (arraylist_base .get(1).contains("Additional")){
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.clear_sky_n));
 				 img1.setTag(R.drawable.n01n);
-				 condDescr.setText(R.string.mist);
-				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + getString(R.string.clear_sky) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
-				 nnn = getString(R.string.now) + " " + getString(R.string.clear_sky) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " ;
+			//	 condDescr.setText(R.string.mist);
+				 textView3.setText(getString(R.string.today) + ": " + getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " + getString(R.string.wind_speed_text)  + " " + arraylist_base .get(8) + " " + getString(R.string.mps) + ".");
+				 nnn = getString(R.string.now) + " " + arraylist_base .get(0) + ". " + getString(R.string.temp_text) + " " + arraylist_base.get(7) + "\u2103" + ", " + getString(R.string.max_temp_text) + " " + arraylist_base .get(6) + "\u2103" + ". " ;
 				 Editor editor = mSettings.edit();
 				   	editor.putString(APP_PREFERENCES_WEATHER, "Additional").commit();
 			}
@@ -860,7 +873,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		tempNight.setText(arraylist_base .get(5) + "\u00B0");
 		textView9.setText(arraylist_base .get(10));
 		textView11.setText(arraylist_base .get(11));
-		
+		condDescr.setText(arraylist_base .get(0));
 		//create_notif();
 		
 ///////FORECAST WEATHER		
@@ -875,9 +888,17 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		scrollView1.smoothScrollTo(0,0);
 		
 //////DAILY WEATHER		
-		adapter_daily = new ListViewAdapterDaily(MainActivity.this, arraylist_daily);
-		// Set the adapter to the ListView
-		listview.setAdapter(adapter_daily);
+		if(daily_hum == 1){
+			adapter_daily_hum = new ListViewAdapterDailyHum(MainActivity.this, arraylist_daily);
+			// Set the adapter to the ListView
+			listview.setAdapter(adapter_daily_hum);
+		}
+		else{
+			adapter_daily = new ListViewAdapterDaily(MainActivity.this, arraylist_daily);
+			// Set the adapter to the ListView
+			listview.setAdapter(adapter_daily);
+		}
+		
 		
 	
 		prog1.setVisibility(View.GONE);
@@ -894,7 +915,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 			Toast.makeText(getApplicationContext(), "Ошибка получения данных!",
 					   Toast.LENGTH_LONG).show();
 			prog1.setVisibility(View.GONE);
-			//check_int();
+			button1.setVisibility(View.VISIBLE);
 		}
 		catch(NullPointerException w){
 			Toast.makeText(getApplicationContext(), "Ошибка!",
@@ -1068,9 +1089,28 @@ protected void onResume() {
 			//String adress = mSettings.getString(APP_PREFERENCES_ADRESS, "q");
 			//Log.d("", adress);
 			
-			url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + city + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
-			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + city + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
-			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + city + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
+    	 	String locale = Locale.getDefault().getLanguage();
+    	 	
+    	 	if (locale.contains("ru")){
+    	 		url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + city + "&units=metric&lang=ru&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + city + "&units=metric&lang=ru&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + city + "&units=metric&lang=ru&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			
+    	 	}
+    	 	else if (locale.contains("uk")){
+    	 		url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + city + "&units=metric&lang=ua&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + city + "&units=metric&lang=ua&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + city + "&units=metric&lang=ua&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			
+    	 	}
+    	 	else {
+    	 		url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + city + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + city + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + city + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			
+    	 	}
+    	 	
+    	 	
 			
     	 	check_int();
     	 	
@@ -1113,11 +1153,11 @@ public void check_int(){
 public boolean onKeyDown(int keycode, KeyEvent e) {
     switch(keycode) {
         case KeyEvent.KEYCODE_BACK:
-        	System.exit(0);/*
+        	
         	Intent intent = new Intent(Intent.ACTION_MAIN);
         	intent.addCategory(Intent.CATEGORY_HOME);
         	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        	startActivity(intent);*/
+        	startActivity(intent);
         	return true;
     }
     return super.onKeyDown(keycode, e);

@@ -162,7 +162,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 				Object o = lvMain.getItemAtPosition(position);
 				
 				ItemDetails obj_itemDetails = (ItemDetails)o;
-				Toast.makeText(AllCityActivity.this, "You have chosen : " + " " + obj_itemDetails.getCityId(), Toast.LENGTH_LONG).show();
+				//Toast.makeText(AllCityActivity.this, "You have chosen : " + " " + obj_itemDetails.getCityId(), Toast.LENGTH_LONG).show();
 				Editor editor = mSettings.edit();
 			   	editor.putString(APP_PREFERENCES_CITY, obj_itemDetails.getCityId()).commit();
 			   	Intent intent = new Intent(AllCityActivity.this, MainActivity.class);
