@@ -91,18 +91,74 @@ class ItemListBaseAdapter extends BaseAdapter {
 	  String s = itemDetailsrrayList.get(position).getWeather();
 	  
 	  if (itemDetailsrrayList.get(position).getIcon().contains("d")){
-		  if(itemDetailsrrayList.get(position).getIcon().contains("500")){
-			  
+		  if(Integer.parseInt(itemDetailsrrayList.get(position).getId()) >= 500 && Integer.parseInt(itemDetailsrrayList.get(position).getId()) < 532){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rain_d_m));
 		  }
-		  else if(itemDetailsrrayList.get(position).getIcon().contains("501")){
-			  
+		  else if(Integer.parseInt(itemDetailsrrayList.get(position).getId()) >=200 && Integer.parseInt(itemDetailsrrayList.get(position).getId()) < 233){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.thunderstorm_m));
 		  }
-		  else if (itemDetailsrrayList.get(position).getIcon().contains("800")){
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 800){
 			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.clear_sky_d_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 801){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.few_clouds_d_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 802){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.scattered_clouds_d_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 803 || Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 804){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.broken_clouds_d_m));
+		  }
+		  else if(Integer.parseInt(itemDetailsrrayList.get(position).getId()) >= 300 && Integer.parseInt(itemDetailsrrayList.get(position).getId()) < 322){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rain_d_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 600){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.snow_d_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 601){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.snow_d_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) >= 602 && Integer.parseInt(itemDetailsrrayList.get(position).getId()) < 623){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.heavy_snow_d_m));
+		  }
+		  else{
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.scattered_clouds_d_m));
 		  }
 	  }
 	  else{
-		  
+		  if(Integer.parseInt(itemDetailsrrayList.get(position).getId()) >= 500 && Integer.parseInt(itemDetailsrrayList.get(position).getId()) < 532){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rain_n_m));
+		  }
+		  else if(Integer.parseInt(itemDetailsrrayList.get(position).getId()) >=200 && Integer.parseInt(itemDetailsrrayList.get(position).getId()) < 233){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.thunderstorm_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 800){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.clear_sky_n_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 801){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.few_clouds_n_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 802){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.scattered_clouds_n_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 803 || Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 804){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.broken_clouds_n_m));
+		  }
+		  else if(Integer.parseInt(itemDetailsrrayList.get(position).getId()) >= 300 && Integer.parseInt(itemDetailsrrayList.get(position).getId()) < 322){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.rain_n_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 600){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.snow_n_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) == 601){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.snow_n_m));
+		  }
+		  else if (Integer.parseInt(itemDetailsrrayList.get(position).getId()) >= 602 && Integer.parseInt(itemDetailsrrayList.get(position).getId()) < 623){
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.heavy_snow_n_m));
+		  }
+		  else{
+			  holder.img.setImageDrawable(mContext.getResources().getDrawable(R.drawable.scattered_clouds_n_m));
+		  }
 	  }
 
 	  return convertView;
