@@ -32,4 +32,6 @@
      
      <string name="top_pref">Enter city, zip code or airport location</string>
      <string name="save">Save</string>
+     
+     <string name="no_sim">No SIM</string>
 </resources>

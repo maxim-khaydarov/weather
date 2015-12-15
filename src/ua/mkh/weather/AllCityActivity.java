@@ -14,9 +14,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
@@ -25,8 +27,11 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager.LayoutParams;
+import android.telephony.PhoneStateListener;
+import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -37,6 +42,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import ua.mkh.weather.MainActivity.myPhoneStateListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -80,6 +86,11 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	  // ArrayList <String> NewsArrayList;
 	   HashMap<String, String> map;
 	   SimpleAdapter adapters;
+	   
+	   TelephonyManager telephonyManager;
+		myPhoneStateListener psListener;
+		
+		TextView textView7, textView14, textView15;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +110,10 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		typefaceThin = Typeface.createFromAsset(getAssets(), thin);
 		typefaceUltra = Typeface.createFromAsset(getAssets(), ultra);
 		
+		textView14 = (TextView) findViewById(R.id.textView14);
+		textView15 = (TextView) findViewById(R.id.textView15);
+		textView7 = (TextView) findViewById(R.id.textView7);
+		
 		btn_plus = (Button) findViewById(R.id.button2);
 		btn_plus.setOnClickListener(this);
 		btn_c_f = (Button) findViewById(R.id.button1);
@@ -112,6 +127,11 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		 arraylist = new ArrayList<HashMap<String, String>>();
 		 
 		 top_bar();
+		 
+		 psListener = new myPhoneStateListener();
+		 telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		 telephonyManager.listen(psListener,PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+		 
 
 		   // mSqLiteDatabase = mDatabaseHelper.getWritableDatabase();
 /*
@@ -568,11 +588,16 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		/////TIME
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		String currentDateandTime = sdf.format(new Date());
-		//textView14.setText(currentDateandTime);
+		textView14.setText(currentDateandTime);
 		
 		////OPERATOR
 		TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-		   //textView7.setText(tManager.getSimOperatorName());
+		   textView7.setText(tManager.getSimOperatorName());
+		   if(textView7.getText().toString().length() == 0){
+			   textView7.setText(R.string.no_sim);
+			   ImageView i = (ImageView) findViewById(R.id.imageView3);
+			   i.setVisibility(View.GONE);
+		   }
 		
 	}
 	
@@ -590,5 +615,119 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	        }
 	        return super.onKeyDown(keycode, e);
 	   }
+	 
+	 private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
+		    @Override
+		    public void onReceive(Context ctxt, Intent intent) {
+		      int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+		      textView15.setText(String.valueOf(level) + " %");
+		      
+		      ImageView im4 = (ImageView) findViewById(R.id.imageView4);
+		      if (level == 100){
+		    	  im4.setImageDrawable(getResources().getDrawable(R.drawable.b_100));
+		      }
+		      else if (level > 90){
+		    	  im4.setImageDrawable(getResources().getDrawable(R.drawable.b_90));
+		      }
+		      else if (level > 70){
+		    	  im4.setImageDrawable(getResources().getDrawable(R.drawable.b_70));
+		      }
+		      else if (level > 50){
+		    	  im4.setImageDrawable(getResources().getDrawable(R.drawable.b_50));
+		      }
+		      else if (level > 30){
+		    	  im4.setImageDrawable(getResources().getDrawable(R.drawable.b_30));
+		      }
+		      else{
+		    	  im4.setImageDrawable(getResources().getDrawable(R.drawable.b_10));
+		      }
+		      
+		      int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
+		      
+		     if (status == BatteryManager.BATTERY_STATUS_CHARGING){
+		    	 im4.setImageDrawable(getResources().getDrawable(R.drawable.b_ch));
+		      } else if (status == BatteryManager.BATTERY_STATUS_DISCHARGING){
+		     
+		      } else if (status == BatteryManager.BATTERY_STATUS_NOT_CHARGING){
+		    
+		      } else if (status == BatteryManager.BATTERY_STATUS_FULL){
+		     
+		     } else {
+		    
+		      }
+		    }
+		  };
+		  
+		  protected void onPause() {
+			    super.onPause();
+			    this.unregisterReceiver(mBatInfoReceiver);
+			    this.unregisterReceiver(mTimeInfoReceiver);
+		  }
+		  
+		  protected void onResume() {
+			    super.onResume();
+			    
+			    this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+			   
+			    IntentFilter filtertime = new IntentFilter();
+			    filtertime.addAction("android.intent.action.TIME_TICK");
+			    registerReceiver(mTimeInfoReceiver, filtertime);
+			    
+			    top_bar();
+		  }
+		  
+		  public class myPhoneStateListener extends PhoneStateListener {
+			    public int signalStrengthValue;
+
+			    public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+			        super.onSignalStrengthsChanged(signalStrength);
+			        if (signalStrength.isGsm()) {
+			            if (signalStrength.getGsmSignalStrength() != 99)
+			                signalStrengthValue = signalStrength.getGsmSignalStrength() * 2 - 113;
+			            else
+			                signalStrengthValue = signalStrength.getGsmSignalStrength();
+			        } else {
+			            signalStrengthValue = signalStrength.getCdmaDbm();
+			        }
+			        
+			        ImageView i = (ImageView) findViewById(R.id.imageView3);
+			        
+			        int signalStrengthValue2 = signalStrengthValue * -1;
+			        
+			        if(signalStrengthValue2 > 50){
+			        	i.setImageDrawable(getResources().getDrawable(R.drawable.s5));
+			        }
+			        else if (signalStrengthValue2 > 40){
+			        	i.setImageDrawable(getResources().getDrawable(R.drawable.s4));
+			        }
+			        else if (signalStrengthValue2 > 30){
+			        	i.setImageDrawable(getResources().getDrawable(R.drawable.s3));
+			        }
+			        else if (signalStrengthValue2 > 15){
+			        	i.setImageDrawable(getResources().getDrawable(R.drawable.s2));
+			        }
+			        else if (signalStrengthValue2 > 0){
+			        	i.setImageDrawable(getResources().getDrawable(R.drawable.s1));
+			        }
+			        
+			        else {
+			        	i.setVisibility(View.GONE);
+			        }
+			        
+			    }
+			}
+		  
+		  private BroadcastReceiver mTimeInfoReceiver = new BroadcastReceiver(){
+			    @Override
+			    public void onReceive(Context ctxt, Intent intent) {
+			    	
+			    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+			   	 String currentDateandTime4 = sdf.format(new Date());
+			   	 
+						textView14.setText(currentDateandTime4);
+					
+			  }
+			};
+
 	 
 }

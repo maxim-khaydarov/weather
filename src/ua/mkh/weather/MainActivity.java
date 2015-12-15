@@ -68,7 +68,6 @@ import android.widget.RemoteViews;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import android.app.TaskStackBuilder;
 
 /*
@@ -1040,7 +1039,11 @@ protected void onResume() {
     super.onResume();
     
     this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-   
+    
+    IntentFilter filtertime = new IntentFilter();
+    filtertime.addAction("android.intent.action.TIME_TICK");
+    registerReceiver(mTimeInfoReceiver, filtertime);
+    
     	 String weather = mSettings.getString(APP_PREFERENCES_WEATHER, "Clear");
     	 	if (weather.contains("light_rain")){
     	 		img1.setImageDrawable(getResources().getDrawable(R.drawable.light_rain_d));
@@ -1120,6 +1123,7 @@ protected void onResume() {
 	
 private void top_bar() {
 	/////TIME
+	
 	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 	String currentDateandTime = sdf.format(new Date());
 	textView14.setText(currentDateandTime);
@@ -1127,6 +1131,11 @@ private void top_bar() {
 	////OPERATOR
 	TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 	   textView7.setText(tManager.getSimOperatorName());
+	   if(textView7.getText().toString().length() == 0){
+		   textView7.setText(R.string.no_sim);
+		   ImageView i = (ImageView) findViewById(R.id.imageView3);
+		   i.setVisibility(View.GONE);
+	   }
 	
 }
 
@@ -1164,6 +1173,19 @@ public boolean onKeyDown(int keycode, KeyEvent e) {
 }
 
 
+private BroadcastReceiver mTimeInfoReceiver = new BroadcastReceiver(){
+    @Override
+    public void onReceive(Context ctxt, Intent intent) {
+    	
+    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+   	 String currentDateandTime4 = sdf.format(new Date());
+   	 
+			textView14.setText(currentDateandTime4);
+		
+  }
+};
+
+
 public class myPhoneStateListener extends PhoneStateListener {
     public int signalStrengthValue;
 
@@ -1182,20 +1204,23 @@ public class myPhoneStateListener extends PhoneStateListener {
         
         int signalStrengthValue2 = signalStrengthValue * -1;
         
-        if(signalStrengthValue2 > 85){
+        if(signalStrengthValue2 > 50){
         	i.setImageDrawable(getResources().getDrawable(R.drawable.s5));
         }
-        else if (signalStrengthValue2 > 75){
+        else if (signalStrengthValue2 > 40){
         	i.setImageDrawable(getResources().getDrawable(R.drawable.s4));
         }
-        else if (signalStrengthValue2 > 50){
+        else if (signalStrengthValue2 > 30){
         	i.setImageDrawable(getResources().getDrawable(R.drawable.s3));
         }
-        else if (signalStrengthValue2 > 25){
+        else if (signalStrengthValue2 > 15){
         	i.setImageDrawable(getResources().getDrawable(R.drawable.s2));
         }
-        else {
+        else if (signalStrengthValue2 > 0){
         	i.setImageDrawable(getResources().getDrawable(R.drawable.s1));
+        }
+        else{
+        	i.setVisibility(View.GONE);
         }
         
     }
@@ -1247,6 +1272,7 @@ private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
   protected void onPause() {
 	    super.onPause();
 	    this.unregisterReceiver(mBatInfoReceiver);
+	    this.unregisterReceiver(mTimeInfoReceiver);
   }
   
   
