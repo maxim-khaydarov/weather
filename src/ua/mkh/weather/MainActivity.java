@@ -570,11 +570,11 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 ////WEATHER BASE	
 		
 		
-		
+		//Toast.makeText(MainActivity.this, arraylist_base .get(2) + "\n" + arraylist_base .get(1) + "\n" + arraylist_base .get(13), Toast.LENGTH_SHORT).show();
 		try{
 		if (arraylist_base .get(2).contains("d")){
 		
-		if (arraylist_base .get(0).contains("Rain")){
+		if (arraylist_base .get(1).contains("Rain")){
 			if (arraylist_base .get(13).contains("500")){
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.light_rain_d));
 				 img1.setTag(R.drawable.d09d);
@@ -585,6 +585,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 				   	editor.putString(APP_PREFERENCES_WEATHER, "light_rain").commit();
 			}
 			else if (arraylist_base .get(13).contains("501")){
+				//Toast.makeText(MainActivity.this, arraylist_base .get(1) + "\n" + arraylist_base .get(13), Toast.LENGTH_SHORT).show();
 				 img1.setImageDrawable(getResources().getDrawable(R.drawable.moderate_rain_d));
 				 img1.setTag(R.drawable.d09d);
 				// condDescr.setText(R.string.moderate_rain);
@@ -603,7 +604,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 			   	editor.putString(APP_PREFERENCES_WEATHER, "heavy_intensity_rain").commit();
 			}
 			}
-		else if (arraylist_base .get(1).contains("Clouds")){
+		 if (arraylist_base .get(1).contains("Clouds")){
 				if (arraylist_base .get(13).contains("801")){
 					 img1.setImageDrawable(getResources().getDrawable(R.drawable.few_clouds_d));
 					 img1.setTag(R.drawable.d03d);
@@ -671,7 +672,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 				   	editor.putString(APP_PREFERENCES_WEATHER, "Snow").commit();
 			}
 		}
-		else if (arraylist_base .get(1).contains("Thunderstorm")){
+		 if (arraylist_base .get(1).contains("Thunderstorm")){
 			 img1.setImageDrawable(getResources().getDrawable(R.drawable.thunderstorm));
 			 img1.setTag(R.drawable.d11d);
 		//	 condDescr.setText(R.string.light_intensity_shower_rain);
@@ -719,6 +720,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 			   	editor.putString(APP_PREFERENCES_WEATHER, "Additional").commit();
 		}
 		}
+	
 		else {
 			if (arraylist_base .get(1).contains("Rain")){
 				if (arraylist_base .get(13).contains("500")){
@@ -866,7 +868,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 			
 		}
 		
-		
+	
 		temp.setText(arraylist_base .get(7) + "\u00B0");
 		hum.setText(arraylist_base .get(4) + " %");
 		press.setText(arraylist_base .get(3));
