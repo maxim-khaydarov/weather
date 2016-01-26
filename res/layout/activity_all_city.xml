@@ -48,12 +48,15 @@
 
         <Button
             android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="false"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
-            android:background="@color/transparent"
-            android:padding="15dp"
+            android:background="@drawable/round_button"
+            android:gravity="center"
             android:text="+"
             android:textColor="@color/white"
             android:textSize="16sp" />
