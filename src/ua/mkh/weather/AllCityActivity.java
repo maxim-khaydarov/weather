@@ -300,7 +300,8 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	        try{
 	        	
 	        prog1.setVisibility(View.VISIBLE);
-	        
+	        btn_c_f.setVisibility(View.GONE);
+	        btn_plus.setVisibility(View.GONE);
 	        
 	        }
 	        catch(NullPointerException e){
@@ -571,6 +572,8 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	protected void onPostExecute(Void result) {		
 ////WEATHER BASE	
 		try{
+			 btn_c_f.setVisibility(View.VISIBLE);
+		        btn_plus.setVisibility(View.VISIBLE);
 		/*adapters = new SimpleAdapter(AllCityActivity.this, arraylist,
 	            R.layout.row_all_city, new String[] { "temp", "date",
 	                    "name", "country" }, new int[] { R.id.temp, R.id.time,
