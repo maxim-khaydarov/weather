@@ -34,4 +34,7 @@
      <string name="save">Save</string>
      
      <string name="no_sim">No SIM</string>
+     
+     <string name="c_f_off_c"><![CDATA[<b>°C</b> / °F]]></string>
+     <string name="c_f_on_f"><![CDATA[°C / <b>°F</b>]]></string> 
 </resources>

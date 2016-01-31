@@ -33,6 +33,7 @@ import android.support.v4.view.ViewPager.LayoutParams;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -54,6 +55,7 @@ import android.widget.ScrollView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 
@@ -65,8 +67,8 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	public static final String APP_PREFERENCES_CITY = "mysettings_city";
 	SharedPreferences mSettings;
 	ListView lvMain;
-	Button btn_plus, btn_c_f;
-	
+	Button btn_plus;
+	Button btn_c_f;
 	private DatabaseHelperCityMain mDatabaseHelper;
 	//private SQLiteDatabase mSqLiteDatabase;
 	
@@ -92,6 +94,9 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		
 		TextView textView7, textView14, textView15;
 	
+		int a = 1;
+		String c = "<b>" + "°C" + "</b> " + " / °F"; 
+		String f = "°C / " + "<b>" + "°F" + "</b>"; 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -118,6 +123,15 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		btn_plus.setOnClickListener(this);
 		btn_c_f = (Button) findViewById(R.id.button1);
 		btn_c_f.setOnClickListener(this);
+		
+		btn_c_f.setTypeface(typefaceThin);
+		btn_plus.setTypeface(typefaceThin);
+		
+		if(a == 1)
+		btn_c_f.setText(Html.fromHtml(c));
+		else
+		btn_c_f.setText(Html.fromHtml(f));
+		
 		
 		mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 		
@@ -265,6 +279,13 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	    	startActivity(intent);
 	    	break;
 	    	
+		case R.id.button1:
+			if(a == 1){
+				btn_c_f.setText(Html.fromHtml(c));
+				a=0;} 
+				else{
+				btn_c_f.setText(Html.fromHtml(f));
+				a=1; }
 	   
 	}
 	}
