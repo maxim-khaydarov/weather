@@ -72,6 +72,10 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	private DatabaseHelperCityMain mDatabaseHelper;
 	//private SQLiteDatabase mSqLiteDatabase;
 	
+	MyProgressBarGreen battery_green;
+	MyProgressBarWhite battery_white;
+	MyProgressBarYellow battery_yellow;
+	
 	final ArrayList<String> catnames = new ArrayList<String>();
 	ArrayAdapter<String> adapter;
 	
@@ -126,6 +130,14 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		
 		btn_c_f.setTypeface(typefaceThin);
 		btn_plus.setTypeface(typefaceThin);
+		
+		battery_green = (MyProgressBarGreen) findViewById(R.id.progressBarGreen);
+	    battery_white = (MyProgressBarWhite) findViewById(R.id.progressBarWhite);
+	    battery_yellow = (MyProgressBarYellow) findViewById(R.id.progressBarYellow);
+		
+	    battery_green.setVisibility(View.INVISIBLE);
+	    battery_white.setVisibility(View.VISIBLE);
+	    battery_yellow.setVisibility(View.INVISIBLE);
 		
 		if(a == 1)
 		btn_c_f.setText(Html.fromHtml(c));
@@ -646,6 +658,10 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		      int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
 		      textView15.setText(String.valueOf(level) + " %");
 		      
+		      
+		      
+		      
+		      /*
 		      ImageView im4 = (ImageView) findViewById(R.id.imageView4);
 		      if (level == 100){
 		    	  im4.setImageDrawable(getResources().getDrawable(R.drawable.b_100));
@@ -665,17 +681,40 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		      else{
 		    	  im4.setImageDrawable(getResources().getDrawable(R.drawable.b_10));
 		      }
+		      */
 		      
+		      ImageView img4 = (ImageView) findViewById(R.id.imageView4);
 		      int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
 		      
 		     if (status == BatteryManager.BATTERY_STATUS_CHARGING){
-		    	 im4.setImageDrawable(getResources().getDrawable(R.drawable.b_ch));
+		    	 battery_green.setVisibility(View.VISIBLE);
+				    battery_white.setVisibility(View.INVISIBLE);
+				    battery_yellow.setVisibility(View.INVISIBLE);
+					battery_green.setProgress(level);
+					img4.setVisibility(View.VISIBLE);
+					
 		      } else if (status == BatteryManager.BATTERY_STATUS_DISCHARGING){
 		     
+		    	  battery_green.setVisibility(View.INVISIBLE);
+				    battery_white.setVisibility(View.VISIBLE);
+				    battery_yellow.setVisibility(View.INVISIBLE);
+					battery_white.setProgress(level);
+					img4.setVisibility(View.GONE);
+					
 		      } else if (status == BatteryManager.BATTERY_STATUS_NOT_CHARGING){
-		    
+				    
+		    	  battery_green.setVisibility(View.INVISIBLE);
+				    battery_white.setVisibility(View.VISIBLE);
+				    battery_yellow.setVisibility(View.INVISIBLE);
+					battery_white.setProgress(level);
+					img4.setVisibility(View.GONE);
+					
 		      } else if (status == BatteryManager.BATTERY_STATUS_FULL){
-		     
+		    	  battery_green.setVisibility(View.INVISIBLE);
+				    battery_white.setVisibility(View.VISIBLE);
+				    battery_yellow.setVisibility(View.INVISIBLE);
+					battery_white.setProgress(level);
+					img4.setVisibility(View.GONE);
 		     } else {
 		    
 		      }

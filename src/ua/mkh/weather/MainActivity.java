@@ -28,7 +28,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.TaskStackBuilder;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -39,11 +41,15 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
+import android.provider.Settings.System;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager.LayoutParams;
 import android.telephony.PhoneStateListener;
@@ -108,6 +114,10 @@ public class MainActivity extends Activity  implements OnClickListener {
 	String nnn;
 	
 	ProgressBar prog1;
+	MyProgressBarGreen battery_green;
+	MyProgressBarWhite battery_white;
+	MyProgressBarYellow battery_yellow;
+	
 	Button button1, button2;
 	
 	TextView day1, day2, day3, day4, day5, day6, day1_temp, day1_icon;
@@ -116,7 +126,7 @@ public class MainActivity extends Activity  implements OnClickListener {
 	int vs = 0;
 	ImageView  img1;
 	
-	ListView listView1;
+	ListView listView1, listView2;
 	HorizontalListView listview;
 	ListViewAdapter adapter;
 	ListViewAdapterDaily adapter_daily;
@@ -199,9 +209,13 @@ public class MainActivity extends Activity  implements OnClickListener {
 		    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudy_cloud);
 			
 			
+		    battery_green = (MyProgressBarGreen) findViewById(R.id.progressBarGreen);
+		    battery_white = (MyProgressBarWhite) findViewById(R.id.progressBarWhite);
+		    battery_yellow = (MyProgressBarYellow) findViewById(R.id.progressBarYellow);
 			
-		    
-			
+		    battery_green.setVisibility(View.INVISIBLE);
+		    battery_white.setVisibility(View.VISIBLE);
+		    battery_yellow.setVisibility(View.INVISIBLE);
 			
 		listView1 = (ListView) findViewById(R.id.listView1);
 		listview = (HorizontalListView) findViewById(R.id.listview);
@@ -897,15 +911,17 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 			adapter_daily_hum = new ListViewAdapterDailyHum(MainActivity.this, arraylist_daily);
 			// Set the adapter to the ListView
 			listview.setAdapter(adapter_daily_hum);
+			listView2.setAdapter(adapter_daily_hum);
 		}
 		else{
 			adapter_daily = new ListViewAdapterDaily(MainActivity.this, arraylist_daily);
 			// Set the adapter to the ListView
 			listview.setAdapter(adapter_daily);
+			listView2.setAdapter(adapter_daily);
 		}
 		
 		
-	
+		//setListViewHeightBasedOnChildren(listView2);
 		prog1.setVisibility(View.GONE);
 		button1.setVisibility(View.VISIBLE);
 		
@@ -1142,7 +1158,65 @@ private void top_bar() {
 		   ImageView i = (ImageView) findViewById(R.id.imageView3);
 		   i.setVisibility(View.GONE);
 	   }
-	
+	   
+	   
+}
+
+public boolean low_mode_check() {
+	   boolean state = true;
+	   boolean state_brightness = true;
+	   boolean state_wifi = true;
+	   boolean state_bt = true;
+	   
+	   int status=Settings.System.getInt(getContentResolver(), "screen_brightness_mode", 0);
+	   if(status == 1){
+		   state_brightness = false;
+	   }
+	   //0
+	   
+	   //
+	   ContentResolver cResolver = getContentResolver();
+     int brightness = 0;
+	   try
+     {
+         //Get the current system brightness
+         brightness = System.getInt(cResolver, System.SCREEN_BRIGHTNESS);
+     } 
+     catch (SettingNotFoundException e) 
+     {
+         //Throw an error case it couldn't be retrieved
+         Log.e("Error", "Cannot access system brightness");
+         e.printStackTrace();
+     }
+	   
+	   if (brightness > 25){
+		   state_brightness = false;
+	   }
+	   
+	 //WIFI
+	   ConnectivityManager connManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+ 	NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+ 	WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE); 
+ 	if(wifi.isWifiEnabled()){
+ 		if(mWifi.isConnected()){
+ 			
+ 		}
+ 		else {
+ 	    		state_wifi = false;
+ 		}
+ 	}
+ 	
+	//Bluetooth
+ 	BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+ 	if (mBluetoothAdapter.isEnabled()) {
+ 		state_bt = false;
+ 	}
+ 	
+ 	if (state_brightness == false || state_wifi == false || state_bt == false){
+ 		state = false;
+ 	}
+ 	
+ 	return state;
 }
 
 
@@ -1239,6 +1313,10 @@ private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
       int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
       textView15.setText(String.valueOf(level) + " %");
       
+      
+      
+      
+      /*
       ImageView im4 = (ImageView) findViewById(R.id.imageView4);
       if (level == 100){
     	  im4.setImageDrawable(getResources().getDrawable(R.drawable.b_100));
@@ -1258,17 +1336,61 @@ private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
       else{
     	  im4.setImageDrawable(getResources().getDrawable(R.drawable.b_10));
       }
+      */
       
+      ImageView img4 = (ImageView) findViewById(R.id.imageView4);
       int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
       
      if (status == BatteryManager.BATTERY_STATUS_CHARGING){
-    	 im4.setImageDrawable(getResources().getDrawable(R.drawable.b_ch));
+    	 
+    	 battery_green.setVisibility(View.VISIBLE);
+		    battery_white.setVisibility(View.INVISIBLE);
+		    battery_yellow.setVisibility(View.INVISIBLE);
+			battery_green.setProgress(level);
+			img4.setVisibility(View.VISIBLE);
+    	 
+			
       } else if (status == BatteryManager.BATTERY_STATUS_DISCHARGING){
      
+    	  if (low_mode_check() == true){
+    		  battery_green.setVisibility(View.INVISIBLE);
+  		    battery_white.setVisibility(View.INVISIBLE);
+  		    battery_yellow.setVisibility(View.VISIBLE);
+  			battery_white.setProgress(level);
+  			img4.setVisibility(View.GONE);
+    	  }
+    	  else{
+    		  battery_green.setVisibility(View.INVISIBLE);
+    		  battery_white.setVisibility(View.VISIBLE);
+  		      battery_yellow.setVisibility(View.INVISIBLE);
+  			  battery_white.setProgress(level);
+  			  img4.setVisibility(View.GONE);
+    	  }
+		    
+			
       } else if (status == BatteryManager.BATTERY_STATUS_NOT_CHARGING){
-    
+		    
+    	  if (low_mode_check() == true){
+    		  battery_green.setVisibility(View.INVISIBLE);
+  		    battery_white.setVisibility(View.INVISIBLE);
+  		    battery_yellow.setVisibility(View.VISIBLE);
+  			battery_white.setProgress(level);
+  			img4.setVisibility(View.GONE);
+    	  }
+    	  else{
+    		  battery_green.setVisibility(View.INVISIBLE);
+    		  battery_white.setVisibility(View.VISIBLE);
+  		      battery_yellow.setVisibility(View.INVISIBLE);
+  			  battery_white.setProgress(level);
+  			  img4.setVisibility(View.GONE);
+    	  }
+			
       } else if (status == BatteryManager.BATTERY_STATUS_FULL){
-     
+    	  battery_green.setVisibility(View.INVISIBLE);
+		    battery_white.setVisibility(View.VISIBLE);
+		    battery_yellow.setVisibility(View.INVISIBLE);
+			battery_white.setProgress(level);
+			img4.setVisibility(View.GONE);
      } else {
     
       }
