@@ -911,13 +911,11 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 			adapter_daily_hum = new ListViewAdapterDailyHum(MainActivity.this, arraylist_daily);
 			// Set the adapter to the ListView
 			listview.setAdapter(adapter_daily_hum);
-			listView2.setAdapter(adapter_daily_hum);
 		}
 		else{
 			adapter_daily = new ListViewAdapterDaily(MainActivity.this, arraylist_daily);
 			// Set the adapter to the ListView
 			listview.setAdapter(adapter_daily);
-			listView2.setAdapter(adapter_daily);
 		}
 		
 		
