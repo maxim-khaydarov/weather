@@ -39,4 +39,7 @@
 	 <string name="podskazka">Підказка: для пошуку, введіть місто на трансліті.\nТакож доступна функція введення міста на кирилиці, але без пошуку.</string>
 	 
 	  <string name="no_sim">Немає SIM-карти</string>
+	  
+	  <string name="sun_rise">Схід</string>
+     <string name="sun_set">Захід</string>
 </resources>

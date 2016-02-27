@@ -350,6 +350,96 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 	
 	@Override
 	protected Void doInBackground(Void... arg0)  {
+		
+		String formattedDateSunrise = "s";
+		String formattedDateSunset = "d";
+		
+		//BASE WEATHER
+				ServiceHandler sh = new ServiceHandler();
+				// Making a request to url and getting response
+				String jsonStr = sh.makeServiceCall(url_base, ServiceHandler.GET);
+				
+				
+				
+				arraylist_base = new ArrayList<String>();
+				// Retrieve JSON Objects from the given URL address
+				
+				//jsonobject_b = JSONfunctions
+				//		.getJSONfromURL(url_base);
+				
+				try {
+					JSONObject jsonObj = new JSONObject(jsonStr);
+		   		 
+		   		 JSONArray  list = jsonObj.getJSONArray("weather");
+		   		String city_b = jsonObj.getString("name");
+		   		
+		   		
+		   		
+		   		int id = 0;
+		   		 //Loop the Array
+		   		for (int i = 0; i < list.length(); i++) {
+		   			JSONObject JSONWeather = list.getJSONObject(i);
+		   			String description_b = JSONWeather.getString("description");
+		   			String main_b = JSONWeather.getString("main");
+		   			String icon_b = JSONWeather.getString("icon").substring(2);
+		   		    id = JSONWeather.getInt("id");
+		   			arraylist_base.add(description_b);//0
+		   			arraylist_base.add(main_b);//1
+		   			arraylist_base.add(icon_b);//2
+
+		   			
+		   		}
+		   		JSONObject sysObj = jsonObj.getJSONObject("sys");
+		   		String country =  sysObj.getString("country");
+		   		long sunrise = sysObj.getLong("sunrise");
+		   		long sunset = sysObj.getLong("sunset");
+		   		
+		   		Date date1 = new Date(sunrise*1000L); // *1000 is to convert seconds to milliseconds
+		   		Date date2 = new Date(sunset*1000L); // *1000 is to convert seconds to milliseconds
+
+		   		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm"); // the format of your date
+		   		formattedDateSunrise = sdf.format(date1);
+		   		formattedDateSunset = sdf.format(date2);
+		   		
+		   		
+		   		
+		   		
+		   		JSONObject mainObj = jsonObj.getJSONObject("main");
+		   		int temp_b = mainObj.getInt("temp");
+		   		int temp_min_b = mainObj.getInt("temp_min");
+				int temp_max_b = mainObj.getInt("temp_max");
+		   		String pressure_b = mainObj.getString("pressure");
+			 	String humidity_b = mainObj.getString("humidity");
+			 	
+			 	 String tmin_b = String.valueOf(Math.round(temp_min_b));
+				 String tmax_b = String.valueOf(Math.round(temp_max_b));
+				 String t_b = String.valueOf(Math.round(temp_b));
+				  
+				  
+				  JSONObject windObj = jsonObj.getJSONObject("wind");
+				  String wind_b = windObj.getString("speed");
+		   		
+				  arraylist_base.add(pressure_b);//3
+				  arraylist_base.add(humidity_b);//4
+				  arraylist_base.add(tmin_b);//5
+				  arraylist_base.add(tmax_b);//6
+				  arraylist_base.add(t_b);//7
+				  arraylist_base.add(wind_b);//8
+				  arraylist_base.add(city_b);//9
+				  arraylist_base.add(formattedDateSunrise);//10
+				  arraylist_base.add(formattedDateSunset);//11
+				  arraylist_base.add(country);//12
+				  arraylist_base.add(String.valueOf(id));//13
+				  
+				}
+				catch (JSONException e){
+			   		 
+			   	 }
+				catch (NullPointerException w){
+		   		 
+		   	 }
+				
+				
 		//DAILY WEATHER
 		
 		arraylist_daily = new ArrayList<HashMap<String, String>>();
@@ -364,7 +454,11 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         		 
         		 JSONArray  list3 = jsonobject_d.getJSONArray("list");
         		 //Loop the Array
-        		 for(int i=0;i < 10; i++){ 
+        		 String y = null;
+        		 
+        		 for(int i=0;i < 9; i++){ 
+        			 
+        			 
         			 JSONObject jDayForecast = list3.getJSONObject(i);
         			 
         			 
@@ -372,8 +466,10 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         			 
         			 
         			 Date date = new Date(dt*1000L); // *1000 is to convert seconds to milliseconds
-        			 SimpleDateFormat sdf = new SimpleDateFormat("kk"); // the format of your date
-        			 String formattedDate = sdf.format(date);
+        			 SimpleDateFormat sdf = new SimpleDateFormat("kk");
+        			 SimpleDateFormat sddf = new SimpleDateFormat("HH:mm");
+        			 String formattedDate = sdf.format(date);// the format of your date
+        			 String formattedDateTime = sddf.format(date);
         			
 
         			 
@@ -388,28 +484,65 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         			 String icon = jWeatherObj.getString("icon");
         			 
         			 HashMap<String, String> map = new HashMap<String, String>();
+        			 
+        			 
+        			
+        			 
+        			 
+        			 
         			 if (i == 0){
         				 if (hum >= 80){
             				 daily_hum = 1;
             			 }
         			 map.put("time", getString(R.string.now));
-        			 map.put("temp", Integer.toString(temp));
+        			 map.put("temp", Integer.toString(temp)+ "\u00B0");
         			 map.put("ic", icon);
-        			 map.put("hum", String.valueOf(hum));
+        			 map.put("hum", String.valueOf(hum)+ "%");
+        			 y = icon.substring(2);
+        			 arraylist_daily.add(map);
+        			 Log.d("Add map", "Add Map i = 0");
         			 }
+        			 
         			 else {
         				 map.put("time", formattedDate);
-            			 map.put("temp", Integer.toString(temp));
+            			 map.put("temp", Integer.toString(temp)+ "\u00B0");
             			 map.put("ic", icon);
-            			 map.put("hum", String.valueOf(hum));
+            			 map.put("hum", String.valueOf(hum)+ "%");
+            			 arraylist_daily.add(map);
+            			 Log.d("Add map", "Add Map i != 0");
         			 }
+        			 
         			 
         			// Log.d("date", upperString);
         			// Log.d("temp_min", Integer.toString(tmin));
         			// Log.d("temp_max", Integer.toString(tmax));
         			// Log.d("icon", icon);
         			 
-        			 arraylist_daily.add(map);
+        			 
+        			 
+        			 
+        			 if(!icon.substring(2).contains(y)){
+        				 
+        				
+        				 //add(icon, formattedDateSunrise, formattedDateSunset, map, arraylist_daily);
+        				 
+        				 if(icon.substring(2).contains("d")){
+        					 map.put("temp", getString(R.string.sun_rise));
+        					 map.put("ic", "get");
+        					 map.put("time", formattedDateSunrise);
+        				 }
+        				 else{
+        					 map.put("temp", getString(R.string.sun_set));
+        					 map.put("ic", "down");
+        					 map.put("time", formattedDateSunset);
+        				 }
+        				
+            			 map.put("hum", "");
+            			
+        			 }
+        			 
+        			 y = icon.substring(2);
+        			 Log.d("ICON Y", y + " - " + icon.substring(2));
         			 
         			 
         		 }
@@ -426,87 +559,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		
 		
 		
-	//BASE WEATHER
-		ServiceHandler sh = new ServiceHandler();
-		// Making a request to url and getting response
-		String jsonStr = sh.makeServiceCall(url_base, ServiceHandler.GET);
-		
-		
-		
-		arraylist_base = new ArrayList<String>();
-		// Retrieve JSON Objects from the given URL address
-		
-		//jsonobject_b = JSONfunctions
-		//		.getJSONfromURL(url_base);
-		
-		try {
-			JSONObject jsonObj = new JSONObject(jsonStr);
-   		 
-   		 JSONArray  list = jsonObj.getJSONArray("weather");
-   		String city_b = jsonObj.getString("name");
-   		
-   		
-   		
-   		int id = 0;
-   		 //Loop the Array
-   		for (int i = 0; i < list.length(); i++) {
-   			JSONObject JSONWeather = list.getJSONObject(i);
-   			String description_b = JSONWeather.getString("description");
-   			String main_b = JSONWeather.getString("main");
-   			String icon_b = JSONWeather.getString("icon").substring(2);
-   		    id = JSONWeather.getInt("id");
-   			arraylist_base.add(description_b);//0
-   			arraylist_base.add(main_b);//1
-   			arraylist_base.add(icon_b);//2
-
-   			
-   		}
-   		JSONObject sysObj = jsonObj.getJSONObject("sys");
-   		String country =  sysObj.getString("country");
-   		long sunrise = sysObj.getLong("sunrise");
-   		long sunset = sysObj.getLong("sunset");
-   		
-   		Date date1 = new Date(sunrise*1000L); // *1000 is to convert seconds to milliseconds
-   		Date date2 = new Date(sunset*1000L); // *1000 is to convert seconds to milliseconds
-
-   		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm"); // the format of your date
-   		String formattedDateSunrise = sdf.format(date1);
-   		String formattedDateSunset = sdf.format(date2);
-   		
-   		JSONObject mainObj = jsonObj.getJSONObject("main");
-   		int temp_b = mainObj.getInt("temp");
-   		int temp_min_b = mainObj.getInt("temp_min");
-		int temp_max_b = mainObj.getInt("temp_max");
-   		String pressure_b = mainObj.getString("pressure");
-	 	String humidity_b = mainObj.getString("humidity");
-	 	
-	 	 String tmin_b = String.valueOf(Math.round(temp_min_b));
-		 String tmax_b = String.valueOf(Math.round(temp_max_b));
-		 String t_b = String.valueOf(Math.round(temp_b));
-		  
-		  
-		  JSONObject windObj = jsonObj.getJSONObject("wind");
-		  String wind_b = windObj.getString("speed");
-   		
-		  arraylist_base.add(pressure_b);//3
-		  arraylist_base.add(humidity_b);//4
-		  arraylist_base.add(tmin_b);//5
-		  arraylist_base.add(tmax_b);//6
-		  arraylist_base.add(t_b);//7
-		  arraylist_base.add(wind_b);//8
-		  arraylist_base.add(city_b);//9
-		  arraylist_base.add(formattedDateSunrise);//10
-		  arraylist_base.add(formattedDateSunset);//11
-		  arraylist_base.add(country);//12
-		  arraylist_base.add(String.valueOf(id));//13
-		  
-		}
-		catch (JSONException e){
-	   		 
-	   	 }
-		catch (NullPointerException w){
-   		 
-   	 }
+	
 	//FORECAST WEATHER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 		arraylist_forecast = new ArrayList<HashMap<String, String>>();
 		// Retrieve JSON Objects from the given URL address
@@ -948,6 +1001,22 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 	
 }
 
+private void add (String icon, String formattedDateSunrise, String formattedDateSunset, HashMap<String, String> map, ArrayList<HashMap<String, String>> arraylist_daily){
+	if(icon.substring(2).contains("d")){
+		 map.put("temp", getString(R.string.sun_rise));
+		 map.put("ic", "get");
+		 map.put("time", formattedDateSunrise);
+	 }
+	 else{
+		 map.put("temp", getString(R.string.sun_set));
+		 map.put("ic", "down");
+		 map.put("time", formattedDateSunset);
+	 }
+	
+	 map.put("hum", "");
+	 arraylist_daily.add(map);
+	 Log.d("Add map", "Add Map add");
+}
 
 private void create_notif() {
 	// TODO Auto-generated method stub
@@ -1350,38 +1419,38 @@ private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
 			
       } else if (status == BatteryManager.BATTERY_STATUS_DISCHARGING){
      
-    	  if (low_mode_check() == true){
+    	  //if (low_mode_check() == true){
     		  battery_green.setVisibility(View.INVISIBLE);
-  		    battery_white.setVisibility(View.INVISIBLE);
-  		    battery_yellow.setVisibility(View.VISIBLE);
+  		    battery_white.setVisibility(View.VISIBLE);
+  		    battery_yellow.setVisibility(View.INVISIBLE);
   			battery_white.setProgress(level);
   			img4.setVisibility(View.GONE);
-    	  }
-    	  else{
+    	//  }
+    	/*  else{
     		  battery_green.setVisibility(View.INVISIBLE);
     		  battery_white.setVisibility(View.VISIBLE);
   		      battery_yellow.setVisibility(View.INVISIBLE);
   			  battery_white.setProgress(level);
   			  img4.setVisibility(View.GONE);
     	  }
-		    
+		    */
 			
       } else if (status == BatteryManager.BATTERY_STATUS_NOT_CHARGING){
 		    
-    	  if (low_mode_check() == true){
+    	//  if (low_mode_check() == true){
     		  battery_green.setVisibility(View.INVISIBLE);
   		    battery_white.setVisibility(View.INVISIBLE);
   		    battery_yellow.setVisibility(View.VISIBLE);
   			battery_white.setProgress(level);
   			img4.setVisibility(View.GONE);
-    	  }
-    	  else{
+    	//  }
+    	/*  else{
     		  battery_green.setVisibility(View.INVISIBLE);
     		  battery_white.setVisibility(View.VISIBLE);
   		      battery_yellow.setVisibility(View.INVISIBLE);
   			  battery_white.setProgress(level);
   			  img4.setVisibility(View.GONE);
-    	  }
+    	  }*/
 			
       } else if (status == BatteryManager.BATTERY_STATUS_FULL){
     	  battery_green.setVisibility(View.INVISIBLE);

@@ -124,12 +124,18 @@ public class ListViewAdapterDailyHum extends BaseAdapter {
 		else if (resultp.get(MainActivity.IC).contains("50n")|| resultp.get(MainActivity.IC).contains("50d")){
 			ic.setImageDrawable(context.getResources().getDrawable(R.drawable.d50d));
 		}
+		else if (resultp.get(MainActivity.IC).contains("down")){
+			ic.setImageDrawable(context.getResources().getDrawable(R.drawable.down_sun));
+		}
+		else if (resultp.get(MainActivity.IC).contains("get")){
+			ic.setImageDrawable(context.getResources().getDrawable(R.drawable.get_sun));
+		}
 		// Capture position and set results to the TextViews
 		time.setText(resultp.get(MainActivity.TIME));
 		//icon.setText(resultp.get(MainActivity.ICON));
-		temp.setText(resultp.get(MainActivity.TEMP)+ "\u00B0");
+		temp.setText(resultp.get(MainActivity.TEMP));
 		
-		hum.setText(resultp.get(MainActivity.HUM) + "%");
+		hum.setText(resultp.get(MainActivity.HUM) );
 		
 		// Capture position and set results to the ImageView
 		// Passes flag images URL into ImageLoader.class

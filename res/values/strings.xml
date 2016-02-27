@@ -37,4 +37,8 @@
      
      <string name="c_f_off_c"><![CDATA[<b>°C</b> / °F]]></string>
      <string name="c_f_on_f"><![CDATA[°C / <b>°F</b>]]></string> 
+     
+     <string name="sun_rise">Sanrise</string>
+     <string name="sun_set">Sunset</string>
+     
 </resources>
