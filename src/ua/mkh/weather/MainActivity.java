@@ -505,6 +505,26 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         			 }
         			 
         			 else {
+        				 if(!icon.substring(2).contains(y)){
+            				 
+              				
+            				 //add(icon, formattedDateSunrise, formattedDateSunset, map, arraylist_daily);
+            				 
+            				 if(icon.substring(2).contains("d")){
+            					 map1.put("temp", getString(R.string.sun_rise));
+            					 map1.put("ic", "get");
+            					 map1.put("time", formattedDateSunrise);
+            				 }
+            				 else{
+            					 map1.put("temp", getString(R.string.sun_set));
+            					 map1.put("ic", "down");
+            					 map1.put("time", formattedDateSunset);
+            				 }
+            				
+                			 map1.put("hum", "");
+                			 arraylist_daily.add(map1);
+                			
+            			 }
         				 map.put("time", formattedDate);
             			 map.put("temp", Integer.toString(temp)+ "\u00B0");
             			 map.put("ic", icon);
@@ -522,26 +542,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         			 
         			 
         			 
-        			 if(!icon.substring(2).contains(y)){
-        				 
-        				
-        				 //add(icon, formattedDateSunrise, formattedDateSunset, map, arraylist_daily);
-        				 
-        				 if(icon.substring(2).contains("d")){
-        					 map1.put("temp", getString(R.string.sun_rise));
-        					 map1.put("ic", "get");
-        					 map1.put("time", formattedDateSunrise);
-        				 }
-        				 else{
-        					 map1.put("temp", getString(R.string.sun_set));
-        					 map1.put("ic", "down");
-        					 map1.put("time", formattedDateSunset);
-        				 }
-        				
-            			 map1.put("hum", "");
-            			 arraylist_daily.add(map1);
-            			
-        			 }
+        			 
         			 
         			 y = icon.substring(2);
         			 Log.d("ICON Y", y + " - " + icon.substring(2));
