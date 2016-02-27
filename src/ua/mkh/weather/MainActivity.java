@@ -484,6 +484,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         			 String icon = jWeatherObj.getString("icon");
         			 
         			 HashMap<String, String> map = new HashMap<String, String>();
+        			 HashMap<String, String> map1 = new HashMap<String, String>();
         			 
         			 
         			
@@ -527,17 +528,18 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         				 //add(icon, formattedDateSunrise, formattedDateSunset, map, arraylist_daily);
         				 
         				 if(icon.substring(2).contains("d")){
-        					 map.put("temp", getString(R.string.sun_rise));
-        					 map.put("ic", "get");
-        					 map.put("time", formattedDateSunrise);
+        					 map1.put("temp", getString(R.string.sun_rise));
+        					 map1.put("ic", "get");
+        					 map1.put("time", formattedDateSunrise);
         				 }
         				 else{
-        					 map.put("temp", getString(R.string.sun_set));
-        					 map.put("ic", "down");
-        					 map.put("time", formattedDateSunset);
+        					 map1.put("temp", getString(R.string.sun_set));
+        					 map1.put("ic", "down");
+        					 map1.put("time", formattedDateSunset);
         				 }
         				
-            			 map.put("hum", "");
+            			 map1.put("hum", "");
+            			 arraylist_daily.add(map1);
             			
         			 }
         			 
