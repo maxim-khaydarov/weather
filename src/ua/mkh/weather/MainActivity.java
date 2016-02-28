@@ -354,6 +354,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		String formattedDateSunrise = "s";
 		String formattedDateSunset = "d";
 		int temp_b = 0;
+		String humidity_b = "";
 		
 		//BASE WEATHER
 				ServiceHandler sh = new ServiceHandler();
@@ -410,7 +411,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		   		int temp_min_b = mainObj.getInt("temp_min");
 				int temp_max_b = mainObj.getInt("temp_max");
 		   		String pressure_b = mainObj.getString("pressure");
-			 	String humidity_b = mainObj.getString("humidity");
+			 	humidity_b = mainObj.getString("humidity");
 			 	
 			 	 String tmin_b = String.valueOf(Math.round(temp_min_b));
 				 String tmax_b = String.valueOf(Math.round(temp_max_b));
@@ -500,7 +501,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         			 map2.put("time", getString(R.string.now));
         			 map2.put("temp", String.valueOf(temp_b)+ "\u00B0");
         			 map2.put("ic", icon);
-        			 map2.put("hum", String.valueOf(hum)+ "%");
+        			 map2.put("hum", humidity_b+ "%");
         			 y = icon.substring(2);
         			 arraylist_daily.add(map2);
         			 //Log.d("Add map", "Add Map i = 0");
