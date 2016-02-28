@@ -65,6 +65,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	Typeface typefaceRoman, typefaceMedium, typefaceBold, typefaceThin, typefaceUltra;
 	public static final String APP_PREFERENCES = "mysettings"; 
 	public static final String APP_PREFERENCES_CITY = "mysettings_city";
+	public static final String APP_PREFERENCES_TEMP = "temp";
 	SharedPreferences mSettings;
 	ListView lvMain;
 	Button btn_plus;
@@ -82,11 +83,15 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	List<City> list;
 	String u = null;
 	
+	String temp_n;
+	
+	
 	JSONObject jsonobject;
 	ArrayList <HashMap<String, String>> arraylist;
 	ProgressBar prog1;
 	
 	ArrayList<ItemDetails> results;
+	String[] stringArray;
 	
 	ArrayAdapter<HashMap<String, String>> array_adapter;
 	  // ArrayList <String> NewsArrayList;
@@ -97,8 +102,9 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		myPhoneStateListener psListener;
 		
 		TextView textView7, textView14, textView15;
+		 
 	
-		int a = 1;
+		int a;
 		String c = "<b>" + "°C" + "</b> " + " / °F"; 
 		String f = "°C / " + "<b>" + "°F" + "</b>"; 
 	@Override
@@ -139,10 +145,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	    battery_white.setVisibility(View.VISIBLE);
 	    battery_yellow.setVisibility(View.INVISIBLE);
 		
-		if(a == 1)
-		btn_c_f.setText(Html.fromHtml(c));
-		else
-		btn_c_f.setText(Html.fromHtml(f));
+		
 		
 		
 		mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
@@ -152,12 +155,15 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		 
 		 arraylist = new ArrayList<HashMap<String, String>>();
 		 
-		 top_bar();
+		 //top_bar();
+		 results = new ArrayList<ItemDetails>();
+		
 		 
 		 psListener = new myPhoneStateListener();
 		 telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		 telephonyManager.listen(psListener,PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-		 
+		
+		 check_int();
 
 		   // mSqLiteDatabase = mDatabaseHelper.getWritableDatabase();
 /*
@@ -181,7 +187,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 			
 			//load_base();
 			
-			check_int();
+			
 			
 			// get all books
 			//mDatabaseHelper.getAllBooks();
@@ -238,9 +244,11 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	}
 	
 	private void load_base() {
-		list = mDatabaseHelper.getAllBooks();
 		
-			String[] stringArray = new String[list.size()];
+		 list = mDatabaseHelper.getAllBooks();
+			
+		 stringArray = new String[list.size()];
+		 
 			for (int i=0; i < list.size(); i++) {
 			   stringArray[i] = list.get(i).toString();
 			   if (u == null){
@@ -292,13 +300,20 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	    	break;
 	    	
 		case R.id.button1:
-			if(a == 1){
+			if(a == 0){
 				btn_c_f.setText(Html.fromHtml(c));
-				a=0;} 
+				Editor editor = mSettings.edit();
+			   	editor.putString(APP_PREFERENCES_TEMP, "c").commit();
+				a=1;} 
 				else{
 				btn_c_f.setText(Html.fromHtml(f));
-				a=1; }
-	   
+				Editor editor = mSettings.edit();
+			   	editor.putString(APP_PREFERENCES_TEMP, "f").commit();
+				a=0; }
+			Intent intentg = getIntent();
+			finish();
+			startActivity(intentg);
+	   break;
 	}
 	}
 	
@@ -324,6 +339,9 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	protected Void doInBackground(Void... arg0)  {
 		//DAILY WEATHER
 		
+		
+		
+		/*
 		Log.e("START", "!!!!!!!!!!");
 		try{
 		list = mDatabaseHelper.getAllBooks();
@@ -344,8 +362,14 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		catch (NullPointerException e){
 			
 		}
+		/////////////////////////
 		
-		String url = "http://api.openweathermap.org/data/2.5/group?id=" + u + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
+		*/
+		
+		load_base();
+		
+		
+		String url = "http://api.openweathermap.org/data/2.5/group?id=" + u + temp_n + "&APPID=0e9e2449bc7a756fad899235dfae7206";
 
 		Log.e("START", url);
 	//BASE WEATHER
@@ -369,8 +393,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
    		 
    		 JSONArray  list = jsonObj.getJSONArray("list");
    		 
-   		results = new ArrayList<ItemDetails>();
-
+   		
    		
 
    		 //Loop the Array
@@ -604,6 +627,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	}
 	
 	public void check_int(){
+		
 		ConnectivityManager conMgr  = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE); 
 		 NetworkInfo info = conMgr.getActiveNetworkInfo(); 
 
@@ -730,13 +754,38 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		  protected void onResume() {
 			    super.onResume();
 			    
+			    
 			    this.registerReceiver(this.mBatInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 			   
 			    IntentFilter filtertime = new IntentFilter();
 			    filtertime.addAction("android.intent.action.TIME_TICK");
 			    registerReceiver(mTimeInfoReceiver, filtertime);
-			    
+			    /*
+			    if(a == 1)
+					btn_c_f.setText(Html.fromHtml(c));
+					else
+					btn_c_f.setText(Html.fromHtml(f));
+			   	*/
+			   	String temp = mSettings.getString(APP_PREFERENCES_TEMP, "c");
+			   	
+			   	if (temp.contains("c")){
+			   		temp_n = "&units=metric";
+			   		btn_c_f.setText(Html.fromHtml(c));
+			   		a = 1;
+			   	}
+			   	else{
+			   		temp_n = "&units=imperial";
+			   		a = 0;
+			   		btn_c_f.setText(Html.fromHtml(f));
+			   	}
+			   	/*
+			   	if(a == 1)
+					btn_c_f.setText(Html.fromHtml(c));
+					else
+					btn_c_f.setText(Html.fromHtml(f));
+			   	*/
 			    top_bar();
+			    //check_int();
 		  }
 		  
 		  public class myPhoneStateListener extends PhoneStateListener {

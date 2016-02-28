@@ -353,6 +353,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		
 		String formattedDateSunrise = "s";
 		String formattedDateSunset = "d";
+		int temp_b = 0;
 		
 		//BASE WEATHER
 				ServiceHandler sh = new ServiceHandler();
@@ -405,7 +406,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
 		   		
 		   		
 		   		JSONObject mainObj = jsonObj.getJSONObject("main");
-		   		int temp_b = mainObj.getInt("temp");
+		   		temp_b = mainObj.getInt("temp");
 		   		int temp_min_b = mainObj.getInt("temp_min");
 				int temp_max_b = mainObj.getInt("temp_max");
 		   		String pressure_b = mainObj.getString("pressure");
@@ -485,6 +486,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         			 
         			 HashMap<String, String> map = new HashMap<String, String>();
         			 HashMap<String, String> map1 = new HashMap<String, String>();
+        			 HashMap<String, String> map2 = new HashMap<String, String>();
         			 
         			 
         			
@@ -495,16 +497,16 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         				 if (hum >= 80){
             				 daily_hum = 1;
             			 }
-        			 map.put("time", getString(R.string.now));
-        			 map.put("temp", Integer.toString(temp)+ "\u00B0");
-        			 map.put("ic", icon);
-        			 map.put("hum", String.valueOf(hum)+ "%");
+        			 map2.put("time", getString(R.string.now));
+        			 map2.put("temp", String.valueOf(temp_b)+ "\u00B0");
+        			 map2.put("ic", icon);
+        			 map2.put("hum", String.valueOf(hum)+ "%");
         			 y = icon.substring(2);
-        			 arraylist_daily.add(map);
-        			 Log.d("Add map", "Add Map i = 0");
+        			 arraylist_daily.add(map2);
+        			 //Log.d("Add map", "Add Map i = 0");
         			 }
         			 
-        			 else {
+        			 
         				 if(!icon.substring(2).contains(y)){
             				 
               				
@@ -531,7 +533,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
             			 map.put("hum", String.valueOf(hum)+ "%");
             			 arraylist_daily.add(map);
             			 Log.d("Add map", "Add Map i != 0");
-        			 }
+        			 
         			 
         			 
         			// Log.d("date", upperString);
