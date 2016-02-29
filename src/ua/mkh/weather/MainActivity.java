@@ -55,6 +55,7 @@ import android.support.v4.view.ViewPager.LayoutParams;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -101,6 +102,7 @@ public class MainActivity extends Activity  implements OnClickListener {
 	public static final String APP_PREFERENCES_CITY = "mysettings_city"; 
 	public static final String APP_PREFERENCES = "mysettings"; 
 	public static final String APP_PREFERENCES_ADRESS = "adress";
+	public static final String APP_PREFERENCES_TEMP = "temp";
 
 	
 	private TextView cityText;
@@ -155,6 +157,7 @@ public class MainActivity extends Activity  implements OnClickListener {
 	TelephonyManager telephonyManager;
 	myPhoneStateListener psListener;
 	
+	String temp_n;
 	
     ArrayList<String> weather = new ArrayList<String>();
    
@@ -548,7 +551,7 @@ private class GetForecastWeather extends AsyncTask<Void, Void, Void>  {
         			 
         			 
         			 y = icon.substring(2);
-        			 Log.d("ICON Y", y + " - " + icon.substring(2));
+        			 
         			 
         			 
         		 }
@@ -1189,22 +1192,31 @@ protected void onResume() {
 			
     	 	String locale = Locale.getDefault().getLanguage();
     	 	
+    	 	String temp = mSettings.getString(APP_PREFERENCES_TEMP, "c");
+		   	
+		   	if (temp.contains("c")){
+		   		temp_n = "&units=metric";
+		   	}
+		   	else{
+		   		temp_n = "&units=imperial";
+		   	}
+    	 	
     	 	if (locale.contains("ru")){
-    	 		url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + city + "&units=metric&lang=ru&APPID=0e9e2449bc7a756fad899235dfae7206";
-    			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + city + "&units=metric&lang=ru&APPID=0e9e2449bc7a756fad899235dfae7206";
-    			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + city + "&units=metric&lang=ru&APPID=0e9e2449bc7a756fad899235dfae7206";
+    	 		url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + city + temp_n + "&lang=ru&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + city + temp_n + "&lang=ru&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + city +  temp_n + "&lang=ru&APPID=0e9e2449bc7a756fad899235dfae7206";
     			
     	 	}
     	 	else if (locale.contains("uk")){
-    	 		url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + city + "&units=metric&lang=ua&APPID=0e9e2449bc7a756fad899235dfae7206";
-    			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + city + "&units=metric&lang=ua&APPID=0e9e2449bc7a756fad899235dfae7206";
-    			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + city + "&units=metric&lang=ua&APPID=0e9e2449bc7a756fad899235dfae7206";
+    	 		url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + city + temp_n + "&lang=ua&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + city + temp_n + "&lang=ua&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + city + temp_n + "&lang=ua&APPID=0e9e2449bc7a756fad899235dfae7206";
     			
     	 	}
     	 	else {
-    	 		url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + city + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
-    			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + city + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
-    			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + city + "&units=metric&APPID=0e9e2449bc7a756fad899235dfae7206";
+    	 		url_forecast = "http://api.openweathermap.org/data/2.5/forecast/daily?mode=json&id=" + city + temp_n + "&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			url_base = "http://api.openweathermap.org/data/2.5/weather?id=" + city + temp_n + "&APPID=0e9e2449bc7a756fad899235dfae7206";
+    			url_daily = "http://api.openweathermap.org/data/2.5/forecast?id=" + city + temp_n + "&APPID=0e9e2449bc7a756fad899235dfae7206";
     			
     	 	}
     	 	

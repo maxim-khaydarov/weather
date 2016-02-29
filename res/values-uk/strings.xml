@@ -36,10 +36,14 @@
      <string name="top_pref">Введіть місто, індекс або найближчий аеропорт</string>
 	 <string name="save">Зберегти</string>
 	 
-	 <string name="podskazka">Підказка: для пошуку, введіть місто на трансліті.\nТакож доступна функція введення міста на кирилиці, але без пошуку.</string>
+	 <string name="podskazka">Підказка: для пошуку, введіть місто.</string>
 	 
 	  <string name="no_sim">Немає SIM-карти</string>
 	  
 	  <string name="sun_rise">Схід</string>
      <string name="sun_set">Захід</string>
+     
+     <string name="error">Помилка</string>
+     <string name="no_city">Введений місто не знайде</string>
+     
 </resources>

@@ -103,7 +103,7 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		
 		TextView textView7, textView14, textView15;
 		 
-	
+		String temp_a;
 		int a;
 		String c = "<b>" + "°C" + "</b> " + " / °F"; 
 		String f = "°C / " + "<b>" + "°F" + "</b>"; 
@@ -158,6 +158,16 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 		 //top_bar();
 		 results = new ArrayList<ItemDetails>();
 		
+		 temp_a = mSettings.getString(APP_PREFERENCES_TEMP, "c");
+		   	
+		   	if (temp_a.contains("c")){
+		   		temp_n = "&units=metric";
+		   		btn_c_f.setText(Html.fromHtml(c));
+		   	}
+		   	else{
+		   		temp_n = "&units=imperial";
+		   		btn_c_f.setText(Html.fromHtml(f));
+		   	}
 		 
 		 psListener = new myPhoneStateListener();
 		 telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -235,7 +245,8 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	            	mDatabaseHelper.deleteBook(list.get(pos));
 	            	results.remove(pos);
 	            	lvMain.setAdapter(new ItemListBaseAdapter(AllCityActivity.this, results));
-	                return true;
+	            	setListViewHeightBasedOnChildren(lvMain);
+	            	return true;
 	            }
 	        }); 
 
@@ -300,16 +311,16 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 	    	break;
 	    	
 		case R.id.button1:
-			if(a == 0){
+			if(temp_a.contains("f")){
 				btn_c_f.setText(Html.fromHtml(c));
 				Editor editor = mSettings.edit();
 			   	editor.putString(APP_PREFERENCES_TEMP, "c").commit();
-				a=1;} 
+				} 
 				else{
 				btn_c_f.setText(Html.fromHtml(f));
 				Editor editor = mSettings.edit();
 			   	editor.putString(APP_PREFERENCES_TEMP, "f").commit();
-				a=0; }
+				}
 			Intent intentg = getIntent();
 			finish();
 			startActivity(intentg);
@@ -766,16 +777,14 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 					else
 					btn_c_f.setText(Html.fromHtml(f));
 			   	*/
-			   	String temp = mSettings.getString(APP_PREFERENCES_TEMP, "c");
+			   	temp_a = mSettings.getString(APP_PREFERENCES_TEMP, "c");
 			   	
-			   	if (temp.contains("c")){
+			   	if (temp_a.contains("c")){
 			   		temp_n = "&units=metric";
 			   		btn_c_f.setText(Html.fromHtml(c));
-			   		a = 1;
 			   	}
 			   	else{
 			   		temp_n = "&units=imperial";
-			   		a = 0;
 			   		btn_c_f.setText(Html.fromHtml(f));
 			   	}
 			   	/*
@@ -786,6 +795,8 @@ public class AllCityActivity extends Activity  implements OnClickListener{
 			   	*/
 			    top_bar();
 			    //check_int();
+			    
+			    Log.e("A =  ", String.valueOf(a));
 		  }
 		  
 		  public class myPhoneStateListener extends PhoneStateListener {

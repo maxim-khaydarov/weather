@@ -36,10 +36,13 @@
      <string name="top_pref">Введите город, индекс или ближайший аэропорт</string>
      <string name="save">Сохранить</string>
      
-     <string name="podskazka">Подсказка: для поиска, вводите город на транслите.\nТак же доступна функция ввода города на кирилице, но без поиска.</string>
+     <string name="podskazka">Подсказка: для поиска, вводите город.</string>
 
       <string name="no_sim">Нет SIM-карты</string>
       
       <string name="sun_rise">Восход</string>
      <string name="sun_set">Закат</string>
+     
+     <string name="error">Ошибка</string>
+     <string name="no_city">Введенный город не найден</string>
 </resources>

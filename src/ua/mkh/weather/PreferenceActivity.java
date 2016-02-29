@@ -24,6 +24,7 @@ import ua.mkh.weather.ItemArrayAdapter.ItemViewHolder;
 
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +44,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
@@ -104,18 +106,18 @@ public class PreferenceActivity extends Activity  implements OnClickListener{
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_pref);
-		/*
+		
 		String roman = "fonts/Regular.otf";
 		String medium = "fonts/Medium.otf";
 		String bold =  "fonts/Bold.otf";
 		String thin = "fonts/Thin.otf";
-		String ultra = "fonts/UltraLight.otf";
+		String ultra = "fonts/Ultralight.otf";
 		typefaceRoman = Typeface.createFromAsset(getAssets(), roman);
 		typefaceMedium = Typeface.createFromAsset(getAssets(), medium);
 		typefaceBold = Typeface.createFromAsset(getAssets(), bold);
 		typefaceThin = Typeface.createFromAsset(getAssets(), thin);
 		typefaceUltra = Typeface.createFromAsset(getAssets(), ultra);
-		*/
+		
 		edt = (EditText) findViewById(R.id.cityEdtText);
 		
 		adapter = new ArrayAdapter<HashMap<String, String>>(this, R.layout.list_country, arraylist)
@@ -226,16 +228,61 @@ public class PreferenceActivity extends Activity  implements OnClickListener{
 		switch(v.getId())  { 
      	
 	    case R.id.button1:
+	    	/*
 	    	Editor editor = mSettings.edit();
   		   	editor.putString(APP_PREFERENCES_ADRESS, "q").commit();
 		   	editor.putString(APP_PREFERENCES_CITY, edt.getText().toString()).commit();
 		   	Log.d("", edt.getText().toString());
 		   	Intent intent = new Intent(this, MainActivity.class);
 	    	startActivity(intent);
+	    	*/
+	    	
+	    	try{
+	    	
+	    	HashMap<String, String> h = arraylist.get(0);
+     	   String i = h.get("id");
+    		   	
+     	   //Log.d("!!", i);
+     	   mDatabaseHelperCity.addBook(new City(i)); 
+     	   
+    		   	Intent intent3 = new Intent(PreferenceActivity.this, AllCityActivity.class);
+    	    	startActivity(intent3);
+	    	}
+	    	catch(IndexOutOfBoundsException e){
+	    		showDialog();
+	    	}
+    	    	
 			break;
 	}
 	}
 	
+	 public void showDialog(){
+	        final Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent);
+	        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	        dialog.setCancelable(false);
+	        dialog.setContentView(R.layout.dialog_inform);
+
+	        TextView text_bold = (TextView) dialog.findViewById(R.id.textBold);
+	        text_bold.setText(R.string.error);
+	        
+	        TextView text = (TextView) dialog.findViewById(R.id.text);
+	        text.setText(R.string.no_city);
+	        
+	        text_bold.setTypeface(typefaceBold);
+	        text.setTypeface(typefaceRoman);
+	        
+
+	        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+	        dialogButton.setOnClickListener(new View.OnClickListener() {
+	            @Override
+	            public void onClick(View v) {
+	                dialog.dismiss();
+	            }
+	        });
+
+	        dialog.show();
+
+	    }
 	
 
 	private class CopyDataBase extends AsyncTask<Void, Void, Void>  {
